@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static final primary = Colors.green[500]!;
-  static final primaryLight = Colors.green[300]!;
+  static final primaryLight = Colors.green[200]!;
   static final primaryDark = Colors.green[700]!;
 
   static final black = Color(0xff120000);
@@ -16,4 +16,7 @@ class AppColors {
   static final red = Colors.red[800]!;
   static final green = Colors.green[800]!;
   static final amber = Colors.amber[800]!;
+
+  static final splashGrey = Color(0xff606060);
+  static final splashBackground = Color(0xffedf7ed);
 }

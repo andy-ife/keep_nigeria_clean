@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:keep_nigeria_clean/theme/colors.dart';
 import 'package:keep_nigeria_clean/theme/styles.dart';
 
@@ -9,18 +10,22 @@ class AppTheme {
       primaryContainer: AppColors.primaryLight,
       primaryFixedDim: AppColors.primaryDark,
       onPrimary: AppColors.white,
-      onPrimaryContainer: AppColors.white,
+      onPrimaryContainer: AppColors.black,
       surface: AppColors.white,
       surfaceDim: AppColors.lightGrey,
       onSurface: AppColors.black,
       onSurfaceVariant: AppColors.grey,
       outline: AppColors.medGrey,
+
+      onPrimaryFixed: AppColors.splashGrey,
+      surfaceBright: AppColors.splashBackground,
     ),
     textTheme: TextTheme(
       headlineMedium: TextStyle(
         fontFamily: 'Poppins',
         fontSize: 28.0,
-        color: AppColors.white,
+        color: AppColors.primary,
+        fontWeight: FontWeight.w600,
       ),
 
       titleMedium: TextStyle(
@@ -36,8 +41,13 @@ class AppTheme {
 
       bodyLarge: TextStyle(fontFamily: 'Poppins', fontSize: 16.0),
       bodyMedium: TextStyle(fontFamily: 'Poppins', fontSize: 14.0),
+      bodySmall: TextStyle(fontFamily: 'Poppins', fontSize: 12.0),
 
-      labelMedium: TextStyle(fontFamily: 'Poppins', fontSize: 12.0),
+      labelMedium: TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 12.0,
+        fontWeight: FontWeight.w600,
+      ),
 
       labelSmall: TextStyle(
         fontFamily: "Poppins",
@@ -47,5 +57,16 @@ class AppTheme {
       ),
     ),
     textButtonTheme: TextButtonThemeData(style: AppButtonStyles.outlined),
+
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.transparent,
+      scrolledUnderElevation: 0.0,
+      systemOverlayStyle: SystemUiOverlayStyle.dark.copyWith(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: AppColors.white,
+        systemNavigationBarDividerColor: AppColors.lightGrey,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+    ),
   );
 }
