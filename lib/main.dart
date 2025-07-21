@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:keep_nigeria_clean/pages/splash.dart';
+import 'package:keep_nigeria_clean/controllers/perms_controller.dart';
 import 'package:keep_nigeria_clean/theme/theme.dart';
+import 'package:keep_nigeria_clean/pages/app.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => PermsController(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -15,7 +22,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: AppTheme.light,
       themeMode: ThemeMode.light,
-      home: SplashScreen(),
+      home: KNCApp(),
     );
   }
 }

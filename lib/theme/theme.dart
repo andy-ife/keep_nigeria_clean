@@ -38,6 +38,11 @@ class AppTheme {
         fontSize: 22.0,
         fontWeight: FontWeight.w600,
       ),
+      titleSmall: TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 14.0,
+        fontWeight: FontWeight.w700,
+      ),
 
       bodyLarge: TextStyle(fontFamily: 'Poppins', fontSize: 16.0),
       bodyMedium: TextStyle(fontFamily: 'Poppins', fontSize: 14.0),
