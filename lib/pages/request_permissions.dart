@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keep_nigeria_clean/controllers/perms_controller.dart';
-import 'package:keep_nigeria_clean/pages/map.dart';
+import 'package:keep_nigeria_clean/pages/home/home.dart';
 import 'package:keep_nigeria_clean/theme/styles.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -34,7 +34,7 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen>
       _permsController.hasPerms().then((doesHave) {
         if (doesHave && mounted) {
           Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => MapScreen()),
+            MaterialPageRoute(builder: (_) => HomeScreen()),
             (route) => false,
           );
         }
@@ -52,7 +52,7 @@ class _RequestPermissionsScreenState extends State<RequestPermissionsScreen>
   void _permsListener() async {
     if (await _permsController.hasPerms() && mounted) {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => MapScreen()),
+        MaterialPageRoute(builder: (_) => HomeScreen()),
         (route) => false,
       );
     }
