@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:keep_nigeria_clean/theme/colors.dart';
 
 class AppButtonStyles {
+  static final floating = TextButton.styleFrom(
+    backgroundColor: AppColors.white,
+    foregroundColor: AppColors.black,
+    textStyle: TextStyle(fontFamily: "Poppins"),
+    padding: EdgeInsets.symmetric(horizontal: 20.0),
+    elevation: 4.0,
+    shape: RoundedRectangleBorder(
+      side: BorderSide(color: Colors.transparent),
+      borderRadius: BorderRadiusGeometry.all(Radius.circular(40.0)),
+    ),
+  );
+
   static final outlined = TextButton.styleFrom(
     backgroundColor: AppColors.white,
     shape: RoundedRectangleBorder(
@@ -18,6 +30,10 @@ class AppButtonStyles {
     foregroundColor: AppColors.white,
     textStyle: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w600),
     padding: EdgeInsets.symmetric(horizontal: 20.0),
+    shape: RoundedRectangleBorder(
+      side: BorderSide(color: Colors.transparent),
+      borderRadius: BorderRadiusGeometry.all(Radius.circular(40.0)),
+    ),
   );
 
   static final text = TextButton.styleFrom(

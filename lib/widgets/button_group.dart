@@ -5,6 +5,7 @@ class KNCButtonGroup extends StatefulWidget {
   const KNCButtonGroup({
     required this.values,
     required this.onSelectionChange,
+    this.floating = false,
     this.scrollable = true,
     this.enableMultiSelection = true,
     this.initialSelection,
@@ -13,6 +14,7 @@ class KNCButtonGroup extends StatefulWidget {
 
   final List<String> values;
   final Function(Set<String>) onSelectionChange;
+  final bool floating;
   final bool scrollable;
   final bool enableMultiSelection;
   final Set<String>? initialSelection;
@@ -50,7 +52,16 @@ class _KNCButtonGroupState extends State<KNCButtonGroup> {
 
                   widget.onSelectionChange(_selected);
                 },
-                style: AppButtonStyles.filled,
+                style: !widget.floating
+                    ? AppButtonStyles.filled
+                    : AppButtonStyles.floating.copyWith(
+                        backgroundColor: WidgetStateProperty.all(
+                          theme.colorScheme.primary,
+                        ),
+                        foregroundColor: WidgetStateProperty.all(
+                          theme.colorScheme.onPrimary,
+                        ),
+                      ),
                 child: Row(
                   children: [
                     Text(curr),
@@ -62,14 +73,19 @@ class _KNCButtonGroupState extends State<KNCButtonGroup> {
             }
             return TextButton(
               onPressed: () {
-                if (widget.enableMultiSelection ||
-                    (!widget.enableMultiSelection && _selected.isEmpty)) {
+                if (widget.enableMultiSelection) {
                   setState(() {
                     _selected.add(curr);
                   });
                   widget.onSelectionChange(_selected);
+                } else {
+                  setState(() {
+                    _selected.clear();
+                    _selected.add(curr);
+                  });
                 }
               },
+              style: !widget.floating ? null : AppButtonStyles.floating,
               child: Text(curr),
             );
           },
