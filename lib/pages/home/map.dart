@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:keep_nigeria_clean/widgets/button_group.dart';
 import 'package:keep_nigeria_clean/widgets/icon_and_label.dart';
+import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -13,6 +14,13 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   bool _showLegend = true;
 
+  final _camera = CameraOptions(
+    center: Point(coordinates: Position(-98.0, 39.5)),
+    zoom: 2,
+    bearing: 0,
+    pitch: 0,
+  );
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -22,9 +30,9 @@ class _MapScreenState extends State<MapScreen> {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          Container(color: Colors.grey[200]), // Map
+          MapWidget(cameraOptions: _camera),
           Positioned(
-            bottom: 16.0,
+            bottom: 32.0,
             left: 16.0,
             child: _showLegend
                 ? GestureDetector(
