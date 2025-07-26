@@ -96,7 +96,7 @@ class _MapScreenState extends State<MapScreen> {
               }
 
               pointAnnotationManager.addOnPointAnnotationClickListener(
-                _OnBinClickListener(),
+                _OnBinClickListener(context: context, mapboxMap: _mapboxMap),
               );
 
               await _mapboxMap.location.updateSettings(
@@ -189,10 +189,34 @@ class _Legend extends StatelessWidget {
 }
 
 class _OnBinClickListener extends OnPointAnnotationClickListener {
+  final BuildContext context;
+  final MapboxMap mapboxMap;
+
+  _OnBinClickListener({required this.context, required this.mapboxMap});
+
   @override
   void onPointAnnotationClick(PointAnnotation annotation) {
-    print(
-      'Annotation clicked: ${annotation.geometry.coordinates.lat}, ${annotation.geometry.coordinates.lng}',
+    final lat = annotation.geometry.coordinates.lat - 0.001;
+    final long = annotation.geometry.coordinates.lng;
+
+    mapboxMap.easeTo(
+      CameraOptions(
+        center: Point(coordinates: Position(long, lat)),
+        zoom: 16.0,
+      ),
+      MapAnimationOptions(duration: 1000),
     );
+
+    if (context.mounted) {
+      showBottomSheet(
+        context: context,
+        builder: (_) => LayoutBuilder(
+          builder: (context, constraints) => Container(
+            height: constraints.maxHeight * 0.5,
+            color: AppColors.white,
+          ),
+        ),
+      );
+    }
   }
 }
