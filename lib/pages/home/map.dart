@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,11 +18,11 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   late MapboxMap _mapboxMap;
 
-  final _cameraOptions = CameraOptions(
+  final _defaultCamera = CameraOptions(
     center: Point(coordinates: Position(6.450693, 9.534526)),
     zoom: 14.0,
-    pitch: 0.0,
-    bearing: 0.0,
+    pitch: 0,
+    bearing: 0,
   );
 
   bool _showLegend = false;
@@ -31,6 +33,32 @@ class _MapScreenState extends State<MapScreen> {
     Point(coordinates: Position(6.454233, 9.530442)),
   ];
 
+  Future<void> _centerCamera() async {
+    Layer? layer;
+    if (Platform.isAndroid) {
+      layer = await _mapboxMap.style.getLayer(
+        "mapbox-location-indicator-layer",
+      );
+    } else {
+      layer = await _mapboxMap.style.getLayer("puck");
+    }
+
+    var location = (layer as LocationIndicatorLayer).location;
+    final position = Position(
+      location?[1] ?? 6.450693,
+      location?[0] ?? 9.534526,
+    );
+
+    _mapboxMap.easeTo(
+      CameraOptions(
+        zoom: 14.0,
+        center: Point(coordinates: position),
+        bearing: 0,
+      ),
+      MapAnimationOptions(duration: 1000),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -39,7 +67,7 @@ class _MapScreenState extends State<MapScreen> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () async => await _centerCamera(),
         shape: CircleBorder(),
         foregroundColor: theme.colorScheme.onPrimary,
         backgroundColor: theme.colorScheme.primary,
@@ -71,15 +99,18 @@ class _MapScreenState extends State<MapScreen> {
                 _OnBinClickListener(),
               );
 
-              _mapboxMap.location.updateSettings(
+              await _mapboxMap.location.updateSettings(
                 LocationComponentSettings(
                   enabled: true,
                   accuracyRingColor: AppColors.accuracyColor.toARGB32(),
                   showAccuracyRing: true,
+                  puckBearingEnabled: true,
                 ),
               );
+
+              await _centerCamera();
             },
-            cameraOptions: _cameraOptions,
+            cameraOptions: _defaultCamera,
           ),
           Positioned(
             bottom: 28.0,
