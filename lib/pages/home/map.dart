@@ -78,10 +78,22 @@ class _MapScreenState extends State<MapScreen> {
           MapWidget(
             key: ValueKey('mapWidget'),
             onMapCreated: (controller) async {
+              // init controller and point annotation manager
               _mapboxMap = controller;
               final pointAnnotationManager = await _mapboxMap.annotations
                   .createPointAnnotationManager();
 
+              // enable location puck
+              await _mapboxMap.location.updateSettings(
+                LocationComponentSettings(
+                  enabled: true,
+                  accuracyRingColor: AppColors.accuracyColor.toARGB32(),
+                  showAccuracyRing: true,
+                  puckBearingEnabled: true,
+                ),
+              );
+
+              // load dummy bin markers
               final bytes = await rootBundle.load('assets/bin-50.png');
               final imgData = bytes.buffer.asUint8List();
 
@@ -99,15 +111,20 @@ class _MapScreenState extends State<MapScreen> {
                 _OnBinClickListener(context: context, mapboxMap: _mapboxMap),
               );
 
-              await _mapboxMap.location.updateSettings(
-                LocationComponentSettings(
-                  enabled: true,
-                  accuracyRingColor: AppColors.accuracyColor.toARGB32(),
-                  showAccuracyRing: true,
-                  puckBearingEnabled: true,
+              // improve compass and scale bar positioning
+              _mapboxMap.compass.updateSettings(
+                CompassSettings(
+                  position: OrnamentPosition.BOTTOM_RIGHT,
+                  marginRight: 20.0,
+                  marginBottom: 80.0,
                 ),
               );
 
+              _mapboxMap.scaleBar.updateSettings(
+                ScaleBarSettings(enabled: false),
+              );
+
+              // center on puck
               await _centerCamera();
             },
             cameraOptions: _defaultCamera,
@@ -213,7 +230,7 @@ class _OnBinClickListener extends OnPointAnnotationClickListener {
         builder: (_) => LayoutBuilder(
           builder: (context, constraints) => Container(
             height: constraints.maxHeight * 0.5,
-            color: AppColors.white,
+            //color: AppColors.white,
           ),
         ),
       );
