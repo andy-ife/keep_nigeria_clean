@@ -37,9 +37,9 @@ class _KNCButtonGroupState extends State<KNCButtonGroup> {
     ThemeData theme = Theme.of(context);
     if (widget.scrollable) {
       return SizedBox(
-        height: 40.0,
+        height: 48.0,
         child: ListView.separated(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
           itemCount: widget.values.length,
           itemBuilder: (context, i) {
             final String curr = widget.values[i];

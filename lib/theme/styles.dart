@@ -7,7 +7,8 @@ class AppButtonStyles {
     foregroundColor: AppColors.black,
     textStyle: TextStyle(fontFamily: "Poppins"),
     padding: EdgeInsets.symmetric(horizontal: 20.0),
-    elevation: 4.0,
+    shadowColor: AppColors.lightGrey,
+    elevation: 2.0,
     shape: RoundedRectangleBorder(
       side: BorderSide(color: Colors.transparent),
       borderRadius: BorderRadiusGeometry.all(Radius.circular(40.0)),

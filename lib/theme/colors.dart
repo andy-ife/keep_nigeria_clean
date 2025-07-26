@@ -19,4 +19,6 @@ class AppColors {
 
   static final splashGrey = Color(0xff606060);
   static final splashBackground = Color(0xffedf7ed);
+
+  static final accuracyColor = Color.fromARGB(57, 165, 214, 167);
 }
