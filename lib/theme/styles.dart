@@ -5,7 +5,7 @@ class AppButtonStyles {
   static final floating = TextButton.styleFrom(
     backgroundColor: AppColors.white,
     foregroundColor: AppColors.black,
-    textStyle: TextStyle(fontFamily: "Poppins"),
+    textStyle: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w500),
     padding: EdgeInsets.symmetric(horizontal: 20.0),
     shadowColor: AppColors.lightGrey,
     elevation: 2.0,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keep_nigeria_clean/pages/home/map.dart';
+import 'package:keep_nigeria_clean/pages/home/rewards.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
           index: _selectedIndex,
           children: [
             MapScreen(),
-            Container(color: Colors.blue),
+            RewardsScreen(),
             Container(color: Colors.green),
             Container(color: Colors.amber),
           ],

@@ -25,23 +25,23 @@ class AppTheme {
         fontFamily: 'Poppins',
         fontSize: 28.0,
         color: AppColors.primary,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
       ),
 
       titleMedium: TextStyle(
         fontFamily: 'Poppins',
         fontSize: 16.0,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
       ),
       titleLarge: TextStyle(
         fontFamily: 'Poppins',
         fontSize: 22.0,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
       ),
       titleSmall: TextStyle(
         fontFamily: 'Poppins',
         fontSize: 14.0,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w500,
       ),
 
       bodyLarge: TextStyle(fontFamily: 'Poppins', fontSize: 16.0),
@@ -51,12 +51,12 @@ class AppTheme {
       labelMedium: TextStyle(
         fontFamily: 'Poppins',
         fontSize: 12.0,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
       ),
 
       labelSmall: TextStyle(
         fontFamily: "Poppins",
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
         letterSpacing: 0.5,
         fontSize: 11.0,
       ),

@@ -16,6 +16,7 @@ class AppColors {
   static final red = Colors.red[800]!;
   static final green = Colors.green[800]!;
   static final amber = Colors.amber[800]!;
+  static final blue = Colors.blue[700]!;
 
   static final splashGrey = Color(0xff606060);
   static final splashBackground = Color(0xffedf7ed);
