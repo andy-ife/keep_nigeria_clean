@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:keep_nigeria_clean/pages/analytics.dart';
 import 'package:keep_nigeria_clean/pages/home/map.dart';
 import 'package:keep_nigeria_clean/pages/home/rewards.dart';
 
@@ -23,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             MapScreen(),
             RewardsScreen(),
-            Container(color: Colors.green),
+            AnalyticsScreen(),
             Container(color: Colors.amber),
           ],
         ),

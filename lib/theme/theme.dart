@@ -28,6 +28,13 @@ class AppTheme {
         fontWeight: FontWeight.w500,
       ),
 
+      headlineSmall: TextStyle(
+        fontFamily: 'Poppins',
+        fontSize: 22.0,
+        color: AppColors.primary,
+        fontWeight: FontWeight.w500,
+      ),
+
       titleMedium: TextStyle(
         fontFamily: 'Poppins',
         fontSize: 16.0,

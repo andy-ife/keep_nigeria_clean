@@ -28,7 +28,7 @@ class RewardsScreen extends StatelessWidget {
         ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
+        padding: EdgeInsets.only(top: 8.0, bottom: 24.0),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
@@ -38,7 +38,7 @@ class RewardsScreen extends StatelessWidget {
               Text(
                 'Earn rewards for proper waste disposal and reporting',
                 style: theme.textTheme.titleMedium!.copyWith(
-                  fontWeight: FontWeight.w600,
+                  //fontWeight: FontWeight.w600,
                   color: theme.colorScheme.primary,
                 ),
               ),
@@ -123,6 +123,18 @@ class RewardsScreen extends StatelessWidget {
                   ),
                   separatorBuilder: (ctx, i) => SizedBox(height: 8.0),
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'How are rewards calculated\nand distributed?',
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.titleMedium!.copyWith(
+                      color: theme.colorScheme.primary,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
