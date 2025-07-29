@@ -13,19 +13,21 @@ class RewardsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Rewards & Leaderboard'),
+        title: Text('Rewards'),
         toolbarHeight: 64.0,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: CircleAvatar(
-            backgroundColor: theme.colorScheme.surfaceVariant,
-            child: Icon(
-              Icons.account_circle,
-              size: 36.0,
-              color: theme.colorScheme.onSurfaceVariant,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: CircleAvatar(
+              backgroundColor: theme.colorScheme.surfaceVariant,
+              child: Icon(
+                Icons.account_circle,
+                size: 36.0,
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
-        ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.only(top: 8.0, bottom: 24.0),
@@ -43,14 +45,16 @@ class RewardsScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(),
+              Text('You', style: theme.textTheme.headlineSmall),
               _ProgressCard(),
               SizedBox(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Wrap(
+                runSpacing: 8.0,
+                crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   Text(
                     'Community Leaderboard',
-                    style: theme.textTheme.titleMedium,
+                    style: theme.textTheme.headlineSmall,
                   ),
                   IconAndLabel(
                     icon: Icon(
@@ -124,6 +128,7 @@ class RewardsScreen extends StatelessWidget {
                   separatorBuilder: (ctx, i) => SizedBox(height: 8.0),
                 ),
               ),
+              SizedBox(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

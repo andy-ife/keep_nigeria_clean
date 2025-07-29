@@ -5,7 +5,7 @@ class AppButtonStyles {
   static final floating = TextButton.styleFrom(
     backgroundColor: AppColors.white,
     foregroundColor: AppColors.black,
-    textStyle: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w500),
+    textStyle: TextStyle(fontFamily: "Poppins", fontWeight: FontWeight.w400),
     padding: EdgeInsets.symmetric(horizontal: 20.0),
     shadowColor: AppColors.lightGrey,
     elevation: 2.0,
@@ -38,6 +38,10 @@ class AppButtonStyles {
   );
 
   static final text = TextButton.styleFrom(
+    shape: RoundedRectangleBorder(
+      side: BorderSide(color: Colors.transparent),
+      borderRadius: BorderRadiusGeometry.all(Radius.circular(40.0)),
+    ),
     backgroundColor: AppColors.white,
     foregroundColor: AppColors.primary,
     textStyle: TextStyle(
