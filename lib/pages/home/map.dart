@@ -3,7 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:keep_nigeria_clean/constants/level.dart';
+import 'package:keep_nigeria_clean/models/gas.dart';
 import 'package:keep_nigeria_clean/theme/colors.dart';
+import 'package:keep_nigeria_clean/theme/styles.dart';
+import 'package:keep_nigeria_clean/utils/helpers.dart';
 import 'package:keep_nigeria_clean/widgets/button_group.dart';
 import 'package:keep_nigeria_clean/widgets/icon_and_label.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -213,7 +217,7 @@ class _OnBinClickListener extends OnPointAnnotationClickListener {
 
   @override
   void onPointAnnotationClick(PointAnnotation annotation) {
-    final lat = annotation.geometry.coordinates.lat - 0.001;
+    final lat = annotation.geometry.coordinates.lat - 0.0016;
     final long = annotation.geometry.coordinates.lng;
 
     mapboxMap.easeTo(
@@ -226,14 +230,389 @@ class _OnBinClickListener extends OnPointAnnotationClickListener {
 
     if (context.mounted) {
       showBottomSheet(
+        backgroundColor: AppColors.white,
         context: context,
         builder: (_) => LayoutBuilder(
-          builder: (context, constraints) => Container(
-            height: constraints.maxHeight * 0.5,
-            //color: AppColors.white,
+          builder: (context, constraints) => SizedBox(
+            height: constraints.maxHeight * 0.6,
+            child: _BinDetailsSheet(
+              name: 'Bin C',
+              location: 'School of ICT',
+              lastUsed: DateTime(2025, 0, 0, 18, 06),
+              city: 'Minna',
+              gases: [
+                Gas(
+                  name: 'Methane',
+                  description: 'Toxic & flammable',
+                  assetPath: 'assets/methane.svg',
+                  level: Level.high,
+                  lastUpdate: DateTime(2025),
+                ),
+                Gas(
+                  name: 'Smoke',
+                  description: 'Could mean fire',
+                  assetPath: 'assets/smoke.svg',
+                  level: Level.low,
+                  lastUpdate: DateTime(2025),
+                ),
+              ],
+              humidity: '68%',
+              lat: '6.5244 N',
+              long: '3.3792 E',
+              temp: '32 C',
+              fillLevel: 0.45,
+            ),
           ),
         ),
       );
     }
+  }
+}
+
+class _BinDetailsSheet extends StatelessWidget {
+  const _BinDetailsSheet({
+    required this.name,
+    required this.location,
+    required this.lastUsed,
+    required this.city,
+    required this.gases,
+    required this.humidity,
+    required this.lat,
+    required this.long,
+    required this.temp,
+    required this.fillLevel,
+  });
+
+  final String name;
+  final String location;
+  final DateTime lastUsed;
+  final List<Gas> gases;
+  final String temp;
+  final String humidity;
+  final String city;
+  final String lat;
+  final String long;
+  final double fillLevel;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final constraints = MediaQuery.of(context).size;
+
+    final toxics = gases.where((gas) => gas.level == Level.high).toList();
+
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: ListTile(
+                        contentPadding: EdgeInsets.all(0.0),
+                        horizontalTitleGap: 4.0,
+                        leading: SvgPicture.asset('assets/bin.svg'),
+                        title: Text(
+                          name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Text(
+                          'In $location',
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 8.0),
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.arrow_back),
+                        ),
+                        SizedBox(width: 4.0),
+                        IconButton(
+                          onPressed: () {},
+                          icon: Icon(Icons.arrow_forward),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.0),
+                if (toxics.isNotEmpty)
+                  SizedBox(
+                    width: double.infinity,
+                    child: Card(
+                      color: Colors.red[300]!,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: IconAndLabel(
+                          spacing: 8.0,
+                          icon: SvgPicture.asset(
+                            'assets/yellow-warning.svg',
+                            width: 24.0,
+                          ),
+                          label: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text:
+                                      'High level of ${toxics[0].name} detected.',
+                                  style: theme.textTheme.bodyMedium!.copyWith(
+                                    color: theme.colorScheme.onPrimary,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: '\nReport?',
+                                  style: theme.textTheme.titleSmall!.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color: theme.colorScheme.onPrimary,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                if (toxics.isNotEmpty) SizedBox(height: 16.0),
+                Column(
+                  spacing: 4.0,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('${((fillLevel * 100).toInt().toString())}% full'),
+                        IconAndLabel(
+                          icon: Icon(
+                            Icons.timer_outlined,
+                            size: 16.0,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          label: Text(
+                            'Last Used ${formatTime24Hour(lastUsed)}',
+                            style: theme.textTheme.bodySmall!.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    LinearProgressIndicator(
+                      value: fillLevel,
+                      minHeight: 16.0,
+                      borderRadius: BorderRadius.circular(16.0),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 28.0),
+                Text('Detected Gases', style: theme.textTheme.headlineSmall),
+                //SizedBox(height: 16.0),
+                ...List.generate(
+                  gases.length,
+                  (i) => ListTile(
+                    horizontalTitleGap: 4.0,
+                    contentPadding: EdgeInsets.all(0.0),
+                    leading: SvgPicture.asset(gases[i].assetPath, width: 40.0),
+                    title: IconAndLabel(
+                      spacing: 6.0,
+                      icon: Text(gases[i].name),
+                      label: _GasStatus(level: gases[i].level),
+                    ),
+                    subtitle: Text(gases[i].description),
+                    trailing: IconAndLabel(
+                      icon: Icon(
+                        Icons.timer_outlined,
+                        size: 20.0,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                      label: Text(
+                        formatTime24Hour(gases[i].lastUpdate ?? DateTime.now()),
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 24.0),
+
+                Row(
+                  spacing: 16.0,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.veryLightGrey,
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: IconAndLabel(
+                            icon: Text(
+                              'Temperature',
+                              style: theme.textTheme.labelMedium!.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                            label: Text(temp, style: theme.textTheme.bodyLarge),
+                            isHorizontal: false,
+                            align: CrossAxisAlignment.start,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.veryLightGrey,
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: IconAndLabel(
+                            icon: Text(
+                              'Humidity',
+                              style: theme.textTheme.labelMedium!.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                            label: Text(
+                              humidity,
+                              style: theme.textTheme.bodyLarge,
+                            ),
+                            isHorizontal: false,
+                            align: CrossAxisAlignment.start,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.0),
+                Row(
+                  spacing: 16.0,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.veryLightGrey,
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: IconAndLabel(
+                            icon: Text(
+                              'Coordinates',
+                              style: theme.textTheme.labelMedium!.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                            label: Text(
+                              '$lat, $long',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodyLarge,
+                            ),
+                            isHorizontal: false,
+                            align: CrossAxisAlignment.start,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.veryLightGrey,
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: IconAndLabel(
+                            icon: Text(
+                              'Region',
+                              style: theme.textTheme.labelMedium!.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                            label: Text(city, style: theme.textTheme.bodyLarge),
+                            isHorizontal: false,
+                            align: CrossAxisAlignment.start,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 24.0),
+              ],
+            ),
+          ),
+
+          SliverToBoxAdapter(
+            child: Row(
+              spacing: 16.0,
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () {},
+                    style: AppButtonStyles.filled,
+                    child: Text('Generate Route'),
+                  ),
+                ),
+                Expanded(
+                  child: TextButton(
+                    onPressed: () {},
+                    style: AppButtonStyles.outlined.copyWith(
+                      foregroundColor: WidgetStateProperty.all(AppColors.red),
+                    ),
+                    child: Text('Report this bin'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GasStatus extends StatelessWidget {
+  const _GasStatus({required this.level});
+
+  final Level level;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    final (color, text) = level == Level.high
+        ? (AppColors.red, 'High')
+        : level == Level.medium
+        ? (AppColors.amber, 'Medium')
+        : (AppColors.green, 'Low');
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 2.0,
+      children: [
+        Container(
+          height: 4.0,
+          width: 4.0,
+          decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+        ),
+        Text(text, style: theme.textTheme.labelSmall!.copyWith(color: color)),
+      ],
+    );
   }
 }

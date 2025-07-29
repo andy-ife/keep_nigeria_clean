@@ -150,11 +150,10 @@ class RewardsScreen extends StatelessWidget {
 }
 
 class _ProgressCard extends StatelessWidget {
-  const _ProgressCard({super.key});
+  const _ProgressCard();
 
   @override
   Widget build(BuildContext context) {
-    final constraints = MediaQuery.of(context).size;
     final theme = Theme.of(context);
 
     return Card(

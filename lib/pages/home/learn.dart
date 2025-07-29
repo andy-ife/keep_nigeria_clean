@@ -55,10 +55,7 @@ class LearnScreen extends StatelessWidget {
           spacing: 16.0,
           children: [
             SizedBox(),
-            Text(
-              'Educational Categories',
-              style: theme.textTheme.headlineSmall,
-            ),
+            Text('Quick Lessons', style: theme.textTheme.headlineSmall),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -149,7 +146,6 @@ class _EducationCard extends StatelessWidget {
     required this.numLessons,
     required this.stickerColor,
     required this.stickerTextColor,
-    super.key,
   });
 
   final Widget icon;
@@ -211,7 +207,6 @@ class _NewsCard extends StatelessWidget {
     required this.source,
     required this.numMinutes,
     required this.views,
-    super.key,
   });
 
   final String title;

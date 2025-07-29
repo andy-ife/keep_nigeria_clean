@@ -6,6 +6,7 @@ class IconAndLabel extends StatelessWidget {
     required this.label,
     this.spacing = 4.0,
     this.isHorizontal = true,
+    this.align = CrossAxisAlignment.center,
     super.key,
   });
 
@@ -13,12 +14,13 @@ class IconAndLabel extends StatelessWidget {
   final Widget label;
   final double spacing;
   final bool isHorizontal;
+  final CrossAxisAlignment align;
 
   @override
   Widget build(BuildContext context) {
     return isHorizontal
-        ? Row(
-            mainAxisSize: MainAxisSize.min,
+        ? Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               icon,
               SizedBox(width: spacing),
@@ -26,6 +28,7 @@ class IconAndLabel extends StatelessWidget {
             ],
           )
         : Column(
+            crossAxisAlignment: align,
             mainAxisSize: MainAxisSize.min,
             children: [
               icon,

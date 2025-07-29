@@ -1,9 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:keep_nigeria_clean/constants/priority.dart';
+import 'package:keep_nigeria_clean/constants/level.dart';
 import 'package:keep_nigeria_clean/theme/colors.dart';
-import 'package:keep_nigeria_clean/theme/styles.dart';
 import 'package:keep_nigeria_clean/widgets/button_group.dart';
 
 class AnalyticsScreen extends StatelessWidget {
@@ -17,6 +16,8 @@ class AnalyticsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Analytics'),
+        actions: [Icon(Icons.notifications)],
+        actionsPadding: EdgeInsets.only(right: 16.0),
         bottom: PreferredSize(
           preferredSize: Size(constraints.width, 64.0),
           child: Padding(
@@ -68,7 +69,7 @@ class AnalyticsScreen extends StatelessWidget {
                 ),
                 ElevatedButton.icon(
                   onPressed: () {},
-                  label: Text('Use AI'),
+                  label: Text('AI Predict'),
                   icon: Icon(Icons.star),
                 ),
               ],
@@ -101,13 +102,13 @@ class AnalyticsScreen extends StatelessWidget {
               title: 'High Priority',
               subtitle:
                   'Bin C requires immediate collection - 95% full with high hazard level',
-              priority: Priority.high,
+              priority: Level.high,
             ),
             _AlertCard(
               title: 'Low Priority',
               subtitle:
                   'Consider reporting Bin A - Trace amounts of alcohol detected.',
-              priority: Priority.low,
+              priority: Level.low,
             ),
           ],
         ),
@@ -117,7 +118,7 @@ class AnalyticsScreen extends StatelessWidget {
 }
 
 class _StatisticCard extends StatelessWidget {
-  const _StatisticCard({required this.title, super.key});
+  const _StatisticCard({required this.title});
 
   final String title;
 
@@ -144,7 +145,6 @@ class _GasDetectionCard extends StatelessWidget {
     required this.label,
     required this.value,
     required this.maxValue,
-    super.key,
   });
 
   final Widget icon;
@@ -180,18 +180,17 @@ class _AlertCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.priority,
-    super.key,
   });
 
   final String title;
   final String subtitle;
-  final Priority priority;
+  final Level priority;
 
   @override
   Widget build(BuildContext context) {
-    final color = priority == Priority.high
+    final color = priority == Level.high
         ? AppColors.red
-        : priority == Priority.medium
+        : priority == Level.medium
         ? AppColors.amber
         : AppColors.green;
 
