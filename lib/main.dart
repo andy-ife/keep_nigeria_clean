@@ -5,11 +5,15 @@ import 'package:keep_nigeria_clean/theme/theme.dart';
 import 'package:keep_nigeria_clean/app.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:keep_nigeria_clean/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   MapboxOptions.setAccessToken(MapboxConstants.accessToken);
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(
     ChangeNotifierProvider(
