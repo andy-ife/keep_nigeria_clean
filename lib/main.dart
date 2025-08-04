@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:keep_nigeria_clean/constants/mapbox.dart';
 import 'package:keep_nigeria_clean/controllers/perms_controller.dart';
@@ -14,6 +15,10 @@ Future<void> main() async {
   MapboxOptions.setAccessToken(MapboxConstants.accessToken);
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  final data = await FirebaseFirestore.instance.collection('binData').get();
+
+  print(data.docs.first.data());
 
   runApp(
     ChangeNotifierProvider(

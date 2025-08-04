@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "742113026258",
-    "project_id": "keep-nigeria-clean",
-    "storage_bucket": "keep-nigeria-clean.firebasestorage.app"
+    "project_number": "936164913422",
+    "project_id": "keep-nigeria-clean-80b2e",
+    "storage_bucket": "keep-nigeria-clean-80b2e.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:742113026258:android:5ad2639d4b9b2af7ddcd0b",
+        "mobilesdk_app_id": "1:936164913422:android:b661e83facf411a266e75f",
         "android_client_info": {
           "package_name": "com.example.keep_nigeria_clean"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAk1q_yrwahAQMNYGolLoSKHCHDD7ixQeU"
+          "current_key": "AIzaSyBEhPPjYl-hbdFWdc_KoVTDNSO-nmigJEI"
         }
       ],
       "services": {
