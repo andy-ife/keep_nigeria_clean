@@ -50,19 +50,21 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBEhPPjYl-hbdFWdc_KoVTDNSO-nmigJEI',
-    appId: '1:936164913422:android:b661e83facf411a266e75f',
-    messagingSenderId: '936164913422',
-    projectId: 'keep-nigeria-clean-80b2e',
-    storageBucket: 'keep-nigeria-clean-80b2e.firebasestorage.app',
+    apiKey: 'AIzaSyCJaCUzu9U1gHkIcCUwWRRha2vk99uFufo',
+    appId: '1:578813582074:android:8d35f81b7d6fbc54bc0743',
+    messagingSenderId: '578813582074',
+    projectId: 'smart-wastebin-6ca5b',
+    databaseURL: 'https://smart-wastebin-6ca5b-default-rtdb.firebaseio.com',
+    storageBucket: 'smart-wastebin-6ca5b.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDZnw_67zwMjzLkSJS7vYVgTsP3UfJYZtM',
-    appId: '1:936164913422:ios:2a86b0436516ad1566e75f',
-    messagingSenderId: '936164913422',
-    projectId: 'keep-nigeria-clean-80b2e',
-    storageBucket: 'keep-nigeria-clean-80b2e.firebasestorage.app',
+    apiKey: 'AIzaSyDU6Z9hFiQBHfkUJbHlyAoLmn-ZPyfKhBE',
+    appId: '1:578813582074:ios:d56739d6bdf0dcd5bc0743',
+    messagingSenderId: '578813582074',
+    projectId: 'smart-wastebin-6ca5b',
+    databaseURL: 'https://smart-wastebin-6ca5b-default-rtdb.firebaseio.com',
+    storageBucket: 'smart-wastebin-6ca5b.firebasestorage.app',
     iosBundleId: 'com.example.keepNigeriaClean',
   );
 
