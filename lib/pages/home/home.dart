@@ -13,23 +13,18 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
+  final _pages = [
+    MapScreen(),
+    RewardsScreen(),
+    AnalyticsScreen(),
+    LearnScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Scaffold(
-      body: SafeArea(
-        top: false,
-        child: IndexedStack(
-          index: _selectedIndex,
-          children: [
-            MapScreen(),
-            RewardsScreen(),
-            AnalyticsScreen(),
-            LearnScreen(),
-          ],
-        ),
-      ),
+      body: SafeArea(top: false, child: _pages[_selectedIndex]),
       bottomNavigationBar: NavigationBar(
         backgroundColor: theme.colorScheme.surface,
         selectedIndex: _selectedIndex,
