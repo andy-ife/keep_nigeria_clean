@@ -66,7 +66,7 @@ class LearnScreen extends StatelessWidget {
                     style: theme.textTheme.bodyLarge,
                   ),
                   subtitle: Text(
-                    'Understanding recycling processes',
+                    'Understanding recycling',
                     style: theme.textTheme.bodyMedium!.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
@@ -82,7 +82,7 @@ class LearnScreen extends StatelessWidget {
                     style: theme.textTheme.bodyLarge,
                   ),
                   subtitle: Text(
-                    'Strategies to minimize waste and littering',
+                    'Strategies to minimize waste',
                     style: theme.textTheme.bodyMedium!.copyWith(
                       color: theme.colorScheme.onSurfaceVariant,
                     ),

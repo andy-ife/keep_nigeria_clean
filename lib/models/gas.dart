@@ -14,4 +14,25 @@ class Gas {
     this.level = Level.nil,
     this.lastUpdate,
   });
+
+  factory Gas.fromJson(Map<String, dynamic> json) => Gas(
+    name: json['name'] ?? '',
+    description: json['description'] ?? '',
+    assetPath: json['asset_path'] ?? '',
+    level: Level.values.firstWhere(
+      (e) => e.toString() == 'Level.${json['level']}',
+      orElse: () => Level.nil,
+    ),
+    lastUpdate: json['last_update'] != null
+        ? DateTime.tryParse(json['last_update'])
+        : null,
+  );
+
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'description': description,
+    'asset_path': assetPath,
+    'level': level.name,
+    'last_update': lastUpdate?.toIso8601String(),
+  };
 }

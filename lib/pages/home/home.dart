@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:keep_nigeria_clean/pages/home/analytics.dart';
 import 'package:keep_nigeria_clean/pages/home/learn.dart';
 import 'package:keep_nigeria_clean/pages/home/map.dart';
-import 'package:keep_nigeria_clean/pages/home/rewards.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,7 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   final _pages = [
     MapScreen(),
-    RewardsScreen(),
+    //RewardsScreen(),
     AnalyticsScreen(),
     LearnScreen(),
   ];
@@ -39,14 +38,14 @@ class _HomeScreenState extends State<HomeScreen> {
             selectedIcon: Icon(Icons.map, color: theme.colorScheme.primary),
             label: "Map",
           ),
-          NavigationDestination(
-            icon: Icon(Icons.emoji_events_outlined),
-            selectedIcon: Icon(
-              Icons.emoji_events,
-              color: theme.colorScheme.primary,
-            ),
-            label: "Rewards",
-          ),
+          // NavigationDestination(
+          //   icon: Icon(Icons.emoji_events_outlined),
+          //   selectedIcon: Icon(
+          //     Icons.emoji_events,
+          //     color: theme.colorScheme.primary,
+          //   ),
+          //   label: "Rewards",
+          // ),
           NavigationDestination(
             icon: Icon(Icons.insert_chart_outlined),
             selectedIcon: Icon(
