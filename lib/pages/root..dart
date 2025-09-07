@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:keep_nigeria_clean/pages/home/analytics.dart';
-import 'package:keep_nigeria_clean/pages/home/learn.dart';
-import 'package:keep_nigeria_clean/pages/home/map.dart';
+import 'package:keep_nigeria_clean/pages/analytics.dart';
+import 'package:keep_nigeria_clean/pages/learn.dart';
+import 'package:keep_nigeria_clean/pages/map.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class RootView extends StatefulWidget {
+  const RootView({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<RootView> createState() => _RootViewState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _RootViewState extends State<RootView> {
   int _selectedIndex = 0;
   final _pages = [
     MapScreen(),
