@@ -32,4 +32,7 @@ class Helper {
       return '$milliseconds millisecond${milliseconds != 1 ? 's' : ''}';
     }
   }
+
+  static double formatLngLat(String lngLat) =>
+      double.parse(lngLat.substring(0, lngLat.length - 1));
 }

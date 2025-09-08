@@ -1,3 +1,4 @@
+import 'package:keep_nigeria_clean/constants/assets.dart';
 import 'package:keep_nigeria_clean/models/gas.dart';
 import 'package:keep_nigeria_clean/models/reading.dart';
 
@@ -11,13 +12,12 @@ class Bin {
 
   Bin({
     Reading? lastReading,
-    List<Gas>? gases,
+    this.gases = const [],
     this.name = '',
     this.address = 'In School of ICT',
     this.region = 'Minna',
-    this.assetPath = '',
-  }) : lastReading = lastReading ?? Reading(),
-       gases = gases ?? [];
+    this.assetPath = AssetConstants.bin0,
+  }) : this.lastReading = lastReading ?? Reading();
 
   factory Bin.fromJson(Map<String, dynamic> json) => Bin(
     lastReading: json['last_reading'] != null
@@ -58,4 +58,12 @@ class Bin {
     region: region ?? this.region,
     assetPath: assetPath ?? this.assetPath,
   );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Bin && runtimeType == other.runtimeType && name == other.name;
+
+  @override
+  int get hashCode => name.hashCode;
 }
