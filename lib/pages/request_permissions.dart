@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keep_nigeria_clean/controllers/perms_controller.dart';
-import 'package:keep_nigeria_clean/pages/root..dart';
+import 'package:keep_nigeria_clean/pages/root.dart';
 import 'package:keep_nigeria_clean/theme/styles.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:keep_nigeria_clean/pages/analytics.dart';
 import 'package:keep_nigeria_clean/pages/learn.dart';
 import 'package:keep_nigeria_clean/pages/map.dart';
+import 'package:keep_nigeria_clean/widgets/upload_interval_dialog.dart';
 
 class RootView extends StatefulWidget {
   const RootView({super.key});
@@ -28,6 +29,13 @@ class _RootViewState extends State<RootView> {
         backgroundColor: theme.colorScheme.surface,
         selectedIndex: _selectedIndex,
         onDestinationSelected: (newIndex) {
+          if (newIndex == 3) {
+            showDialog(
+              context: context,
+              builder: (ctx) => UploadIntervalDialog(),
+            );
+            return;
+          }
           setState(() {
             _selectedIndex = newIndex;
           });
@@ -61,6 +69,14 @@ class _RootViewState extends State<RootView> {
               color: theme.colorScheme.primary,
             ),
             label: 'Learn',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.settings_outlined),
+            selectedIcon: Icon(
+              Icons.settings,
+              color: theme.colorScheme.primary,
+            ),
+            label: "Settings",
           ),
         ],
       ),

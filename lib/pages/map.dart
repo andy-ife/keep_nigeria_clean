@@ -412,7 +412,7 @@ class _BinDetailsSheet extends StatelessWidget {
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),
                                 label: Text(
-                                  'Last Used ${formatTime24Hour(lastUsed)}',
+                                  'Last Used ${Helper.formatTime24Hour(lastUsed)}',
                                   style: theme.textTheme.bodySmall!.copyWith(
                                     color: theme.colorScheme.onSurfaceVariant,
                                   ),
@@ -455,7 +455,7 @@ class _BinDetailsSheet extends StatelessWidget {
                               color: theme.colorScheme.onSurfaceVariant,
                             ),
                             label: Text(
-                              formatTime24Hour(
+                              Helper.formatTime24Hour(
                                 gases[i].lastUpdate ?? DateTime.now(),
                               ),
                               style: theme.textTheme.bodyMedium!.copyWith(

@@ -13,8 +13,8 @@ class Bin {
     Reading? lastReading,
     List<Gas>? gases,
     this.name = '',
-    this.address = '',
-    this.region = '',
+    this.address = 'In School of ICT',
+    this.region = 'Minna',
     this.assetPath = '',
   }) : lastReading = lastReading ?? Reading(),
        gases = gases ?? [];
@@ -42,4 +42,20 @@ class Bin {
     'region': region,
     'asset_path': assetPath,
   };
+
+  Bin copyWith({
+    Reading? lastReading,
+    List<Gas>? gases,
+    String? name,
+    String? address,
+    String? region,
+    String? assetPath,
+  }) => Bin(
+    lastReading: lastReading ?? this.lastReading,
+    gases: gases ?? this.gases,
+    name: name ?? this.name,
+    address: address ?? this.address,
+    region: region ?? this.region,
+    assetPath: assetPath ?? this.assetPath,
+  );
 }

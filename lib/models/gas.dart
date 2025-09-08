@@ -35,4 +35,20 @@ class Gas {
     'level': level.name,
     'last_update': lastUpdate?.toIso8601String(),
   };
+
+  Gas copyWith({
+    String? name,
+    String? description,
+    String? assetPath,
+    Level? level,
+    DateTime? lastUpdate,
+  }) {
+    return Gas(
+      name: name ?? this.name,
+      description: description ?? this.description,
+      assetPath: assetPath ?? this.assetPath,
+      level: level ?? this.level,
+      lastUpdate: lastUpdate ?? this.lastUpdate,
+    );
+  }
 }
