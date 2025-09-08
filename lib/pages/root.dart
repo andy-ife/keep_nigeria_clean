@@ -55,17 +55,17 @@ class _RootViewState extends State<RootView> {
           //   label: "Rewards",
           // ),
           NavigationDestination(
-            icon: Icon(Icons.insert_chart_outlined),
+            icon: Icon(Icons.insights),
             selectedIcon: Icon(
-              Icons.insert_chart,
+              Icons.insights_rounded,
               color: theme.colorScheme.primary,
             ),
             label: "Analytics",
           ),
           NavigationDestination(
-            icon: Icon(Icons.menu_book_outlined),
+            icon: Icon(Icons.lightbulb_outline),
             selectedIcon: Icon(
-              Icons.menu_book,
+              Icons.lightbulb_rounded,
               color: theme.colorScheme.primary,
             ),
             label: 'Learn',

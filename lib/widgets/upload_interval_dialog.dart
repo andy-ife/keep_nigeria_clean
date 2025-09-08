@@ -12,8 +12,9 @@ class UploadIntervalDialog extends StatefulWidget {
 
 class _UploadIntervalDialogState extends State<UploadIntervalDialog> {
   final TextEditingController _controller = TextEditingController();
-  bool _loading = true;
-  String? _errorMessage;
+  bool _loading = false;
+  bool _saving = false;
+  String? _error;
   int? _currentInterval;
 
   final _service = BinDataService();
@@ -26,16 +27,19 @@ class _UploadIntervalDialogState extends State<UploadIntervalDialog> {
 
   @override
   void dispose() {
+    _controller.clear();
     _controller.dispose();
     super.dispose();
   }
 
   Future<void> _loadCurrentInterval() async {
     if (_loading) return;
+    _controller.clear();
+
     try {
       setState(() {
         _loading = true;
-        _errorMessage = null;
+        _error = null;
       });
 
       final interval = await _service.getUploadInterval();
@@ -46,7 +50,7 @@ class _UploadIntervalDialogState extends State<UploadIntervalDialog> {
       });
     } catch (e) {
       setState(() {
-        _errorMessage = 'Failed to load current interval: $e';
+        _error = 'Failed to load current interval: $e';
       });
     } finally {
       setState(() {
@@ -56,13 +60,13 @@ class _UploadIntervalDialogState extends State<UploadIntervalDialog> {
   }
 
   Future<void> _saveInterval() async {
-    if (_loading) return;
+    if (_saving) return;
 
     final inputText = _controller.text.trim();
 
     if (inputText.isEmpty) {
       setState(() {
-        _errorMessage = 'Please enter a frequency value';
+        _error = 'Please enter a frequency value';
       });
       return;
     }
@@ -70,22 +74,22 @@ class _UploadIntervalDialogState extends State<UploadIntervalDialog> {
     final interval = int.tryParse(inputText);
     if (interval == null || interval <= 0) {
       setState(() {
-        _errorMessage = 'Please enter a valid positive number';
+        _error = 'Please enter a valid positive number';
       });
       return;
     }
 
     if (interval < 10000) {
       setState(() {
-        _errorMessage = 'Minimum interval is 10000ms (10 seconds)';
+        _error = 'Minimum interval is 10000ms (10 seconds)';
       });
       return;
     }
 
     try {
       setState(() {
-        _loading = true;
-        _errorMessage = null;
+        _saving = true;
+        _error = null;
       });
 
       await _service.setUploadInterval(interval);
@@ -103,45 +107,56 @@ class _UploadIntervalDialogState extends State<UploadIntervalDialog> {
         );
       }
     } catch (e) {
+      _controller.clear();
       setState(() {
-        _errorMessage = 'Failed to update interval: $e';
+        _currentInterval = null;
+        _error = 'Failed to update interval: $e';
       });
     } finally {
       setState(() {
-        _loading = false;
+        _saving = false;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AlertDialog(
-      title: const Row(
-        children: [
-          Icon(Icons.schedule, color: Colors.blue),
-          SizedBox(width: 8),
-          Text('Upload Frequency'),
-        ],
-      ),
-      content: SizedBox(
-        width: 300,
+      backgroundColor: theme.colorScheme.surface,
+      icon: Icon(Icons.schedule, color: Colors.blue),
+      title: const Text('Upload Frequency'),
+      content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Configure how often smart waste bins upload data to the server. The frequency is set in milliseconds.',
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+            Text(
+              'Configure how often smart bins upload data to the server. The frequency is set in milliseconds.',
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium!.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: 16),
 
-            if (_loading) ...[
-              const Center(
+            if (_loading || _saving) ...[
+              Center(
                 child: Column(
                   children: [
-                    CircularProgressIndicator(),
+                    SizedBox.square(
+                      dimension: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 3.0,
+                        strokeCap: StrokeCap.round,
+                      ),
+                    ),
                     SizedBox(height: 12),
-                    Text('Loading current settings...'),
+                    Text(
+                      _loading
+                          ? 'Loading current settings...'
+                          : 'Saving settings...',
+                      style: theme.textTheme.bodySmall,
+                    ),
                   ],
                 ),
               ),
@@ -181,13 +196,13 @@ class _UploadIntervalDialogState extends State<UploadIntervalDialog> {
                 controller: _controller,
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                enabled: !_loading,
+                enabled: !(_loading || _saving),
                 decoration: InputDecoration(
                   labelText: 'Frequency (milliseconds)',
                   hintText: 'e.g., 30000 for 30 seconds',
                   prefixIcon: const Icon(Icons.timer),
                   border: const OutlineInputBorder(),
-                  errorText: _errorMessage,
+                  errorText: _error,
                   helperText:
                       _controller.text.isNotEmpty &&
                           int.tryParse(_controller.text) != null
@@ -195,46 +210,23 @@ class _UploadIntervalDialogState extends State<UploadIntervalDialog> {
                       : null,
                 ),
               ),
-
-              const SizedBox(height: 12),
-
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.amber.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: const Row(
-                  children: [
-                    Icon(Icons.warning_amber, size: 16, color: Colors.orange),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Minimum interval: 1000ms (1 second)',
-                        style: TextStyle(fontSize: 12, color: Colors.orange),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ],
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: _loading ? null : () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: (_loading || _loading) ? null : _saveInterval,
-          child: _loading
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : const Text('Update'),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: (_loading || _saving)
+                ? null
+                : (_error != null && _error!.contains("Failed to load"))
+                ? _loadCurrentInterval
+                : _saveInterval,
+            child: _error != null && _error!.contains("Failed to load")
+                ? const Text('Retry')
+                : const Text('Update'),
+          ),
         ),
       ],
     );

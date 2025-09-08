@@ -90,12 +90,14 @@ class BinDataService {
   }
 
   Future<int> setUploadInterval(int frequency) async {
-    await _uploadIntervalRef.set(frequency);
+    await _uploadIntervalRef.set(frequency).timeout(Duration(seconds: 10));
     return frequency;
   }
 
   Future<int> getUploadInterval() async {
-    final snapshot = await _uploadIntervalRef.get();
+    final snapshot = await _uploadIntervalRef.get().timeout(
+      Duration(seconds: 10),
+    );
     return snapshot.value as int;
   }
 }
