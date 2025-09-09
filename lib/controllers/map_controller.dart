@@ -53,14 +53,8 @@ class MapController extends ChangeNotifier {
 
         this.bins[index] = bin;
 
-        await _updatePointAssetAndGeometry(
-          point,
-          assetPath,
-          reading.longitude,
-          reading.latitude,
-        );
+        await _updateMarker(point, bin);
 
-        await _pointAnnotationManager.update(point);
         notifyListeners();
       });
     }
@@ -108,7 +102,7 @@ class MapController extends ChangeNotifier {
     );
   }
 
-  void initMap(BuildContext context, MapboxMap controller) async {
+  void initMap(MapboxMap controller) async {
     // init controller and point annotation manager
     map = controller;
     _pointAnnotationManager = await map.annotations
@@ -126,30 +120,7 @@ class MapController extends ChangeNotifier {
 
     // load initial bin markers
     for (Bin bin in bins) {
-      final bytes = await rootBundle.load(bin.assetPath);
-      final imgData = bytes.buffer.asUint8List();
-
-      final options = PointAnnotationOptions(
-        geometry: Point(
-          coordinates: Position(
-            bin.lastReading.longitude,
-            bin.lastReading.latitude,
-          ),
-        ),
-        image: imgData,
-        iconSize: 0.8,
-        textField: bin.name,
-        textOpacity: 0,
-      );
-
-      final p = await _pointAnnotationManager.create(options);
-      _points.add(p);
-
-      if (context.mounted) {
-        _pointAnnotationManager.addOnPointAnnotationClickListener(
-          _OnBinClickListener(controller: this, notify: notifyListeners),
-        );
-      }
+      _updateMarker(null, bin);
     }
 
     // improve compass and scale bar positioning
@@ -167,18 +138,34 @@ class MapController extends ChangeNotifier {
     await centerCamera();
   }
 
-  Future<void> _updatePointAssetAndGeometry(
-    PointAnnotation point,
-    String assetPath,
-    double long,
-    double lat,
-  ) async {
-    final bytes = await rootBundle.load(assetPath);
+  Future<void> _updateMarker(PointAnnotation? point, Bin bin) async {
+    if (point != null && _points.contains(point)) {
+      await _pointAnnotationManager.delete(point);
+      _points.remove(point);
+    }
+
+    final bytes = await rootBundle.load(bin.assetPath);
     final imgData = bytes.buffer.asUint8List();
 
-    point.image = imgData;
+    final options = PointAnnotationOptions(
+      geometry: Point(
+        coordinates: Position(
+          bin.lastReading.longitude,
+          bin.lastReading.latitude,
+        ),
+      ),
+      image: imgData,
+      iconSize: 0.8,
+      textField: bin.name,
+      textOpacity: 0,
+    );
 
-    point.geometry = Point(coordinates: Position(long, lat));
+    final p = await _pointAnnotationManager.create(options);
+    _points.add(p);
+
+    _pointAnnotationManager.addOnPointAnnotationClickListener(
+      _OnBinClickListener(controller: this, notify: notifyListeners),
+    );
   }
 }
 

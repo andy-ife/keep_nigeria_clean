@@ -46,7 +46,7 @@ class MapScreen extends StatelessWidget {
         children: [
           MapWidget(
             key: ValueKey('mapWidget'),
-            onMapCreated: (map) => controller.initMap(context, map),
+            onMapCreated: controller.initMap,
             cameraOptions: MapboxConstants.defaultCamera,
           ),
           Positioned(
@@ -81,7 +81,7 @@ class MapScreen extends StatelessWidget {
                 child: KNCButtonGroup(
                   values: controller.filters.map((f) => f.name).toList(),
                   onSelectionChange: (newValues) {
-                    if(newValues.isEmpty){
+                    if (newValues.isEmpty) {
                       controller.filterBy(null);
                       return;
                     }
