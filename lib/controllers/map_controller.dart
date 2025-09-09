@@ -78,7 +78,7 @@ class MapController extends ChangeNotifier {
 
   // Mapbox-related code
 
-  Future<void> centerCamera() async {
+  Future<void> centerOnPuck() async {
     Layer? layer;
     if (Platform.isAndroid) {
       layer = await map.style.getLayer("mapbox-location-indicator-layer");
@@ -96,6 +96,22 @@ class MapController extends ChangeNotifier {
       CameraOptions(
         zoom: 14.0,
         center: Point(coordinates: position),
+        bearing: 0,
+      ),
+      MapAnimationOptions(duration: 1000),
+    );
+  }
+
+  Future<void> centerOnBins() async {
+    final (lat, long) = (
+      bins[0].lastReading.latitude,
+      bins[0].lastReading.longitude,
+    );
+
+    map.easeTo(
+      CameraOptions(
+        zoom: 14.0,
+        center: Point(coordinates: Position(long, lat)),
         bearing: 0,
       ),
       MapAnimationOptions(duration: 1000),
@@ -128,14 +144,14 @@ class MapController extends ChangeNotifier {
       CompassSettings(
         position: OrnamentPosition.BOTTOM_RIGHT,
         marginRight: 20.0,
-        marginBottom: 80.0,
+        marginBottom: 160.0,
       ),
     );
 
     map.scaleBar.updateSettings(ScaleBarSettings(enabled: false));
 
     // center on puck
-    await centerCamera();
+    await centerOnPuck();
   }
 
   Future<void> _updateMarker(PointAnnotation? point, Bin bin) async {

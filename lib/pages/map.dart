@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:keep_nigeria_clean/constants/mapbox.dart';
 import 'package:keep_nigeria_clean/controllers/map_controller.dart';
 import 'package:keep_nigeria_clean/widgets/bin_details_sheet.dart';
@@ -35,12 +36,25 @@ class MapScreen extends StatelessWidget {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async => await controller.centerCamera(),
-        shape: CircleBorder(),
-        foregroundColor: theme.colorScheme.onPrimary,
-        backgroundColor: theme.colorScheme.primary,
-        child: Icon(Icons.my_location_outlined),
+      floatingActionButton: Column(
+        spacing: 16.0,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            onPressed: () async => await controller.centerOnBins(),
+            shape: CircleBorder(),
+            foregroundColor: Colors.black,
+            backgroundColor: theme.colorScheme.surface,
+            child: Icon(Icons.delete_outlined),
+          ),
+          FloatingActionButton(
+            onPressed: () async => await controller.centerOnPuck(),
+            shape: CircleBorder(),
+            foregroundColor: theme.colorScheme.onPrimary,
+            backgroundColor: theme.colorScheme.primary,
+            child: Icon(Icons.my_location_outlined),
+          ),
+        ],
       ),
       body: Stack(
         children: [
