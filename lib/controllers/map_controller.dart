@@ -18,17 +18,17 @@ class MapController extends ChangeNotifier {
   late PointAnnotationManager _pointAnnotationManager;
   final _points = <PointAnnotation>[];
 
-  final filters = ['Nearest bins', 'Emptiest bins', 'Low odor bins'];
+  final filters = [FilterType.nearest, FilterType.emptiest, FilterType.lowOdor];
   bool _showLegend = false;
+  Bin? selectedBin;
+  bool showBinSheet = false;
+  bool sheetVisible = false;
+
   bool get showLegend => _showLegend;
   set showLegend(bool value) {
     _showLegend = value;
     notifyListeners();
   }
-
-  Bin? selectedBin;
-  bool showBinSheet = false;
-  bool sheetVisible = false;
 
   MapController() {
     _listen();
@@ -66,16 +66,17 @@ class MapController extends ChangeNotifier {
     }
   }
 
-  void filterBy(FilterType filter) {
+  void filterBy(FilterType? filter) {
     switch (filter) {
       case FilterType.nearest:
-        bins = bins;
         break;
       case FilterType.emptiest:
-        bins = bins.where((bin) => bin.lastReading.fillLevel < 20).toList();
+        //bins = bins.where((bin) => bin.lastReading.fillLevel < 20).toList();
         break;
       case FilterType.lowOdor:
-        bins = bins.where((bin) => bin.lastReading.gasPpm < 100).toList();
+        //bins = bins.where((bin) => bin.lastReading.gasPpm < 100).toList();
+        break;
+      case null:
         break;
     }
     notifyListeners();

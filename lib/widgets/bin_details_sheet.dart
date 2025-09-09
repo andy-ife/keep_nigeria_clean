@@ -202,7 +202,7 @@ class BinDetailsSheet extends StatelessWidget {
                             Icon(
                               Icons.check_circle,
                               color: theme.colorScheme.primaryContainer,
-                              size: 20.0,
+                              size: 18.0,
                             ),
                           ],
                         ),
