@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:keep_nigeria_clean/controllers/map_controller.dart';
 import 'package:keep_nigeria_clean/pages/analytics.dart';
 import 'package:keep_nigeria_clean/pages/learn.dart';
 import 'package:keep_nigeria_clean/pages/map.dart';
 import 'package:keep_nigeria_clean/widgets/upload_interval_dialog.dart';
-import 'package:provider/provider.dart';
 
 class RootView extends StatefulWidget {
   const RootView({super.key});
@@ -16,7 +14,7 @@ class RootView extends StatefulWidget {
 class _RootViewState extends State<RootView> {
   int _selectedIndex = 0;
   final _pages = [
-    ChangeNotifierProvider(create: (_) => MapController(), child: MapScreen()),
+    MapScreen(),
     //RewardsScreen(),
     AnalyticsScreen(),
     LearnScreen(),

@@ -1,6 +1,6 @@
 class Reading {
-  final String latitude;
-  final String longitude;
+  final double latitude;
+  final double longitude;
   final double fillLevel;
   final double temperature;
   final double humidity;
@@ -9,8 +9,8 @@ class Reading {
   final String timestamp;
 
   const Reading({
-    this.latitude = "9.0820N",
-    this.longitude = "8.6753E",
+    this.latitude = 9.0820,
+    this.longitude = 8.6753,
     this.fillLevel = 0,
     this.temperature = 0,
     this.humidity = 0,
@@ -36,8 +36,7 @@ class Reading {
     fillLevel: json['fill_level'],
     temperature: json['temperature'],
     humidity: json['humidity'],
-    id: json['id'],
     timestamp: json['timestamp'],
-    gasPpm: json['gas_ppm'],
+    gasPpm: (json['gas_ppm'] as int).toDouble(),
   );
 }

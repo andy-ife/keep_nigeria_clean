@@ -7,17 +7,20 @@ import 'package:keep_nigeria_clean/models/bin.dart';
 import 'package:keep_nigeria_clean/models/reading.dart';
 import 'package:keep_nigeria_clean/services/bin_data_service.dart';
 import 'package:keep_nigeria_clean/theme/colors.dart';
-import 'package:keep_nigeria_clean/utils/helpers.dart';
-import 'package:keep_nigeria_clean/widgets/bin_details_sheet.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class MapController extends ChangeNotifier {
   final _service = BinDataService();
+
   Bin bin1 = Bin(name: 'Bin A');
   Bin bin2 = Bin(name: 'Bin B');
   List<Bin> get bins => [bin1, bin2];
   set bins(List<Bin> newBins) => bins = newBins;
+
   late MapboxMap map;
+  late PointAnnotationManager _pointAnnotationManager;
+  final _points = <PointAnnotation>[];
+
   final filters = ['Nearest bins', 'Emptiest bins', 'Low odor bins'];
   bool _showLegend = false;
   bool get showLegend => _showLegend;
@@ -26,36 +29,58 @@ class MapController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Bin? selectedBin;
+  bool showBinSheet = false;
+
   MapController() {
     _listen();
   }
 
   void _listen() {
-    _service.bin1Stream().listen((data) {
+    _service.bin1Stream().listen((data) async {
       final reading = data ?? Reading();
 
       final gases = _service.calculateGases(reading.gasPpm);
       final assetPath = _service.calculateAssetPath(reading.fillLevel);
+      final point = _points.firstWhere((p) => p.textField == bin1.name);
 
       bin1 = bin1.copyWith(
         lastReading: reading,
         gases: gases,
         assetPath: assetPath,
       );
+
+      point.geometry = Point(
+        coordinates: Position(
+          bin1.lastReading.longitude,
+          bin1.lastReading.latitude,
+        ),
+      );
+      await _pointAnnotationManager.update(point);
       notifyListeners();
     });
 
-    _service.bin2Stream().listen((data) {
+    _service.bin2Stream().listen((data) async {
       final reading = data ?? Reading();
 
       final gases = _service.calculateGases(reading.gasPpm);
       final assetPath = _service.calculateAssetPath(reading.fillLevel);
+      final point = _points.firstWhere((p) => p.textField == bin2.name);
 
       bin2 = bin2.copyWith(
         lastReading: reading,
         gases: gases,
         assetPath: assetPath,
       );
+
+      point.geometry = Point(
+        coordinates: Position(
+          bin2.lastReading.longitude,
+          bin2.lastReading.latitude,
+        ),
+      );
+
+      await _pointAnnotationManager.update(point);
       notifyListeners();
     });
   }
@@ -104,7 +129,7 @@ class MapController extends ChangeNotifier {
   void initMap(BuildContext context, MapboxMap controller) async {
     // init controller and point annotation manager
     map = controller;
-    final pointAnnotationManager = await map.annotations
+    _pointAnnotationManager = await map.annotations
         .createPointAnnotationManager();
 
     // enable location puck
@@ -118,15 +143,15 @@ class MapController extends ChangeNotifier {
     );
 
     // load initial bin markers
-    bins.forEach((bin) async {
+    for (Bin bin in bins) {
       final bytes = await rootBundle.load(bin.assetPath);
       final imgData = bytes.buffer.asUint8List();
 
       final options = PointAnnotationOptions(
         geometry: Point(
           coordinates: Position(
-            Helper.formatLngLat(bin.lastReading.longitude),
-            Helper.formatLngLat(bin.lastReading.latitude),
+            bin.lastReading.longitude,
+            bin.lastReading.latitude,
           ),
         ),
         image: imgData,
@@ -135,14 +160,15 @@ class MapController extends ChangeNotifier {
         textOpacity: 0,
       );
 
-      pointAnnotationManager.create(options);
+      final p = await _pointAnnotationManager.create(options);
+      _points.add(p);
 
       if (context.mounted) {
-        pointAnnotationManager.addOnPointAnnotationClickListener(
-          _OnBinClickListener(context: context, mapboxMap: map, bins: bins),
+        _pointAnnotationManager.addOnPointAnnotationClickListener(
+          _OnBinClickListener(controller: this, notify: notifyListeners),
         );
       }
-    });
+    }
 
     // improve compass and scale bar positioning
     map.compass.updateSettings(
@@ -161,23 +187,20 @@ class MapController extends ChangeNotifier {
 }
 
 class _OnBinClickListener extends OnPointAnnotationClickListener {
-  final BuildContext context;
-  final MapboxMap mapboxMap;
-  final List<Bin> bins;
+  final MapController controller;
+  final VoidCallback notify;
 
-  _OnBinClickListener({
-    required this.context,
-    required this.mapboxMap,
-    required this.bins,
-  });
+  _OnBinClickListener({required this.controller, required this.notify});
 
   @override
   void onPointAnnotationClick(PointAnnotation annotation) {
     final lat = annotation.geometry.coordinates.lat - 0.0016;
     final long = annotation.geometry.coordinates.lng;
-    final bin = bins.firstWhere((bin) => bin.name == annotation.textField!);
+    final bin = controller.bins.firstWhere(
+      (bin) => bin.name == annotation.textField!,
+    );
 
-    mapboxMap.easeTo(
+    controller.map.easeTo(
       CameraOptions(
         center: Point(coordinates: Position(long, lat)),
         zoom: 16.0,
@@ -185,14 +208,8 @@ class _OnBinClickListener extends OnPointAnnotationClickListener {
       MapAnimationOptions(duration: 1000),
     );
 
-    if (context.mounted) {
-      showModalBottomSheet(
-        isScrollControlled: true,
-        useRootNavigator: true,
-        backgroundColor: Colors.transparent,
-        context: context,
-        builder: (_) => BinDetailsSheet(initialBin: bin),
-      );
-    }
+    controller.selectedBin = bin;
+    controller.showBinSheet = true;
+    notify();
   }
 }

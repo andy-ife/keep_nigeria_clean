@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keep_nigeria_clean/constants/mapbox.dart';
+import 'package:keep_nigeria_clean/controllers/map_controller.dart';
 import 'package:keep_nigeria_clean/controllers/perms_controller.dart';
 import 'package:keep_nigeria_clean/theme/theme.dart';
 import 'package:keep_nigeria_clean/app.dart';
@@ -16,8 +17,11 @@ Future<void> main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => PermsController(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => PermsController()),
+        ChangeNotifierProvider(create: (_) => MapController()),
+      ],
       child: const MyApp(),
     ),
   );

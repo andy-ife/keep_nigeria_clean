@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:keep_nigeria_clean/constants/level.dart';
 import 'package:keep_nigeria_clean/controllers/map_controller.dart';
 import 'package:keep_nigeria_clean/models/bin.dart';
-import 'package:keep_nigeria_clean/models/gas.dart';
 import 'package:keep_nigeria_clean/theme/colors.dart';
 import 'package:keep_nigeria_clean/theme/styles.dart';
 import 'package:keep_nigeria_clean/utils/helpers.dart';
@@ -57,7 +56,7 @@ class BinDetailsSheet extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               subtitle: Text(
-                                'In ${bin.address}',
+                                bin.address,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -129,7 +128,7 @@ class BinDetailsSheet extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                '${((bin.lastReading.fillLevel * 100).toInt().toString())}% full',
+                                '${((bin.lastReading.fillLevel).toInt().toString())}% full',
                               ),
                               IconAndLabel(
                                 icon: Icon(
@@ -155,7 +154,7 @@ class BinDetailsSheet extends StatelessWidget {
                       ),
                       SizedBox(height: 28.0),
                       Text(
-                        'Detected bin.Gases',
+                        'Detected Gases',
                         style: theme.textTheme.headlineSmall,
                       ),
                       //SizedBox(height: 16.0),
@@ -182,7 +181,7 @@ class BinDetailsSheet extends StatelessWidget {
                             ),
                             label: Text(
                               Helper.formatTime24Hour(
-                                bin.gases[i].lastUpdate ?? DateTime.now(),
+                                DateTime.parse(bin.lastReading.timestamp),
                               ),
                               style: theme.textTheme.bodyMedium!.copyWith(
                                 color: theme.colorScheme.onSurfaceVariant,

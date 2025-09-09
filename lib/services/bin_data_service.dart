@@ -23,15 +23,19 @@ class BinDataService {
 
   Stream<Reading?> bin1Stream() {
     return _bin1Ref.onValue.map((event) {
-      final data = event.snapshot.value as Map<String, dynamic>?;
-      return data != null ? Reading.fromJson(data) : null;
+      final data = event.snapshot.value as Map?;
+      return data != null
+          ? Reading.fromJson(data.cast<String, dynamic>())
+          : null;
     });
   }
 
   Stream<Reading?> bin2Stream() {
     return _bin2Ref.onValue.map((event) {
-      final data = event.snapshot.value as Map<String, dynamic>?;
-      return data != null ? Reading.fromJson(data) : null;
+      final data = event.snapshot.value as Map?;
+      return data != null
+          ? Reading.fromJson(data.cast<String, dynamic>())
+          : null;
     });
   }
 

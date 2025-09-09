@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:keep_nigeria_clean/constants/mapbox.dart';
 import 'package:keep_nigeria_clean/controllers/map_controller.dart';
+import 'package:keep_nigeria_clean/widgets/bin_details_sheet.dart';
 import 'package:keep_nigeria_clean/widgets/button_group.dart';
 import 'package:keep_nigeria_clean/widgets/icon_and_label.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
@@ -14,6 +15,18 @@ class MapScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = context.watch<MapController>();
+
+    if (controller.showBinSheet) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => showModalBottomSheet(
+          isScrollControlled: true,
+          useRootNavigator: true,
+          backgroundColor: Colors.transparent,
+          context: context,
+          builder: (_) => BinDetailsSheet(initialBin: controller.selectedBin!),
+        ).then((_) => controller.showBinSheet = false),
+      );
+    }
 
     return Scaffold(
       extendBodyBehindAppBar: true,
