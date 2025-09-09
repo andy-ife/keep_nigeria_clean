@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:keep_nigeria_clean/constants/mapbox.dart';
 import 'package:keep_nigeria_clean/controllers/map_controller.dart';
 import 'package:keep_nigeria_clean/widgets/bin_details_sheet.dart';
@@ -8,31 +7,45 @@ import 'package:keep_nigeria_clean/widgets/legend.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
-class MapScreen extends StatelessWidget {
+class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
+
+  @override
+  State<MapScreen> createState() => _MapScreenState();
+}
+
+class _MapScreenState extends State<MapScreen> {
+  late MapController controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller = Provider.of<MapController>(context, listen: false);
+    controller.addListener(_sheetListener);
+  }
+
+  void _sheetListener() {
+    if (controller.showBinSheet && !controller.sheetVisible) {
+      controller.sheetVisible = true;
+
+      showModalBottomSheet(
+        isScrollControlled: true,
+        useRootNavigator: true,
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (_) => BinDetailsSheet(initialBin: controller.selectedBin!),
+      ).then((_) {
+        controller.showBinSheet = false;
+        controller.sheetVisible = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = context.watch<MapController>();
-
-    if (controller.showBinSheet && !controller.sheetVisible) {
-      controller.sheetVisible = true;
-      WidgetsBinding.instance.addPostFrameCallback(
-        (_) =>
-            showModalBottomSheet(
-              isScrollControlled: true,
-              useRootNavigator: true,
-              backgroundColor: Colors.transparent,
-              context: context,
-              builder: (_) =>
-                  BinDetailsSheet(initialBin: controller.selectedBin!),
-            ).then((_) {
-              controller.showBinSheet = false;
-              controller.sheetVisible = false;
-            }),
-      );
-    }
 
     return Scaffold(
       extendBodyBehindAppBar: true,
