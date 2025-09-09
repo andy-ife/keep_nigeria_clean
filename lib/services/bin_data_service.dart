@@ -39,6 +39,8 @@ class BinDataService {
     });
   }
 
+  List<Stream<Reading?>> get streams => [bin1Stream(), bin2Stream()];
+
   List<Gas> calculateGases(double gasPpm) {
     final gases = <Gas>[];
 

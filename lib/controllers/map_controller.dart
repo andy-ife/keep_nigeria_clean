@@ -12,10 +12,7 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 class MapController extends ChangeNotifier {
   final _service = BinDataService();
 
-  Bin bin1 = Bin(name: 'Bin A');
-  Bin bin2 = Bin(name: 'Bin B');
-  List<Bin> get bins => [bin1, bin2];
-  set bins(List<Bin> newBins) => bins = newBins;
+  List<Bin> bins = [Bin(name: 'Bin A', id: 1), Bin(name: 'Bin B', id: 2)];
 
   late MapboxMap map;
   late PointAnnotationManager _pointAnnotationManager;
@@ -31,58 +28,42 @@ class MapController extends ChangeNotifier {
 
   Bin? selectedBin;
   bool showBinSheet = false;
+  bool sheetVisible = false;
 
   MapController() {
     _listen();
   }
 
   void _listen() {
-    _service.bin1Stream().listen((data) async {
-      final reading = data ?? Reading();
+    for (Stream<Reading?> stream in _service.streams) {
+      stream.listen((data) async {
+        final reading = data ?? Reading();
+        Bin bin = bins.firstWhere((bin) => bin.id == reading.id);
+        int index = bins.indexWhere((bin) => bin.id == reading.id);
 
-      final gases = _service.calculateGases(reading.gasPpm);
-      final assetPath = _service.calculateAssetPath(reading.fillLevel);
-      final point = _points.firstWhere((p) => p.textField == bin1.name);
+        final gases = _service.calculateGases(reading.gasPpm);
+        final assetPath = _service.calculateAssetPath(reading.fillLevel);
+        final point = _points.firstWhere((p) => p.textField == bin.name);
 
-      bin1 = bin1.copyWith(
-        lastReading: reading,
-        gases: gases,
-        assetPath: assetPath,
-      );
+        bin = bin.copyWith(
+          lastReading: reading,
+          gases: gases,
+          assetPath: assetPath,
+        );
 
-      point.geometry = Point(
-        coordinates: Position(
-          bin1.lastReading.longitude,
-          bin1.lastReading.latitude,
-        ),
-      );
-      await _pointAnnotationManager.update(point);
-      notifyListeners();
-    });
+        this.bins[index] = bin;
 
-    _service.bin2Stream().listen((data) async {
-      final reading = data ?? Reading();
+        await _updatePointAssetAndGeometry(
+          point,
+          assetPath,
+          reading.longitude,
+          reading.latitude,
+        );
 
-      final gases = _service.calculateGases(reading.gasPpm);
-      final assetPath = _service.calculateAssetPath(reading.fillLevel);
-      final point = _points.firstWhere((p) => p.textField == bin2.name);
-
-      bin2 = bin2.copyWith(
-        lastReading: reading,
-        gases: gases,
-        assetPath: assetPath,
-      );
-
-      point.geometry = Point(
-        coordinates: Position(
-          bin2.lastReading.longitude,
-          bin2.lastReading.latitude,
-        ),
-      );
-
-      await _pointAnnotationManager.update(point);
-      notifyListeners();
-    });
+        await _pointAnnotationManager.update(point);
+        notifyListeners();
+      });
+    }
   }
 
   void filterBy(FilterType filter) {
@@ -183,6 +164,20 @@ class MapController extends ChangeNotifier {
 
     // center on puck
     await centerCamera();
+  }
+
+  Future<void> _updatePointAssetAndGeometry(
+    PointAnnotation point,
+    String assetPath,
+    double long,
+    double lat,
+  ) async {
+    final bytes = await rootBundle.load(assetPath);
+    final imgData = bytes.buffer.asUint8List();
+
+    point.image = imgData;
+
+    point.geometry = Point(coordinates: Position(long, lat));
   }
 }
 

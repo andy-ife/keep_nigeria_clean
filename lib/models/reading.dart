@@ -1,3 +1,5 @@
+import 'package:keep_nigeria_clean/utils/helpers.dart';
+
 class Reading {
   final double latitude;
   final double longitude;
@@ -5,7 +7,7 @@ class Reading {
   final double temperature;
   final double humidity;
   final double gasPpm;
-  final String id;
+  final int id;
   final String timestamp;
 
   const Reading({
@@ -15,7 +17,7 @@ class Reading {
     this.temperature = 0,
     this.humidity = 0,
     this.gasPpm = 0,
-    this.id = 'knc_smart_bin',
+    this.id = 0,
     this.timestamp = '1999-01-01T00:00',
   });
 
@@ -31,12 +33,13 @@ class Reading {
   };
 
   factory Reading.fromJson(Map<String, dynamic> json) => Reading(
-    latitude: json['latitude'],
-    longitude: json['longitude'],
-    fillLevel: json['fill_level'],
-    temperature: json['temperature'],
-    humidity: json['humidity'],
+    latitude: Helper.doubleFromJson(json['latitude']),
+    longitude: Helper.doubleFromJson(json['longitude']),
+    fillLevel: Helper.doubleFromJson(json['fill_level']),
+    temperature: Helper.doubleFromJson(json['temperature']),
+    humidity: Helper.doubleFromJson(json['humidity']),
     timestamp: json['timestamp'],
-    gasPpm: (json['gas_ppm'] as int).toDouble(),
+    id: json['id'],
+    gasPpm: Helper.doubleFromJson(json['gas_ppm']),
   );
 }

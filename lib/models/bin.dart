@@ -9,6 +9,7 @@ class Bin {
   final String address;
   final String region;
   final String assetPath;
+  final int id;
 
   Bin({
     Reading? lastReading,
@@ -17,6 +18,7 @@ class Bin {
     this.address = 'In School of ICT',
     this.region = 'Minna',
     this.assetPath = AssetConstants.bin0,
+    this.id = 0,
   }) : this.lastReading = lastReading ?? Reading();
 
   factory Bin.fromJson(Map<String, dynamic> json) => Bin(
@@ -32,6 +34,7 @@ class Bin {
     address: json['address'] ?? '',
     region: json['region'] ?? '',
     assetPath: json['asset_path'] ?? '',
+    id: json['id'],
   );
 
   Map<String, dynamic> toJson() => {
@@ -41,6 +44,7 @@ class Bin {
     'address': address,
     'region': region,
     'asset_path': assetPath,
+    'id': id,
   };
 
   Bin copyWith({
@@ -50,6 +54,7 @@ class Bin {
     String? address,
     String? region,
     String? assetPath,
+    int? id,
   }) => Bin(
     lastReading: lastReading ?? this.lastReading,
     gases: gases ?? this.gases,
@@ -57,6 +62,7 @@ class Bin {
     address: address ?? this.address,
     region: region ?? this.region,
     assetPath: assetPath ?? this.assetPath,
+    id: id ?? this.id,
   );
 
   @override

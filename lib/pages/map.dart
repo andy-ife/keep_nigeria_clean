@@ -16,15 +16,21 @@ class MapScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final controller = context.watch<MapController>();
 
-    if (controller.showBinSheet) {
+    if (controller.showBinSheet && !controller.sheetVisible) {
+      controller.sheetVisible = true;
       WidgetsBinding.instance.addPostFrameCallback(
-        (_) => showModalBottomSheet(
-          isScrollControlled: true,
-          useRootNavigator: true,
-          backgroundColor: Colors.transparent,
-          context: context,
-          builder: (_) => BinDetailsSheet(initialBin: controller.selectedBin!),
-        ).then((_) => controller.showBinSheet = false),
+        (_) =>
+            showModalBottomSheet(
+              isScrollControlled: true,
+              useRootNavigator: true,
+              backgroundColor: Colors.transparent,
+              context: context,
+              builder: (_) =>
+                  BinDetailsSheet(initialBin: controller.selectedBin!),
+            ).then((_) {
+              controller.showBinSheet = false;
+              controller.sheetVisible = false;
+            }),
       );
     }
 

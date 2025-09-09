@@ -153,43 +153,59 @@ class BinDetailsSheet extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 28.0),
-                      Text(
-                        'Detected Gases',
-                        style: theme.textTheme.headlineSmall,
-                      ),
-                      //SizedBox(height: 16.0),
-                      ...List.generate(
-                        bin.gases.length,
-                        (i) => ListTile(
-                          horizontalTitleGap: 4.0,
-                          contentPadding: EdgeInsets.all(0.0),
-                          leading: SvgPicture.asset(
-                            bin.gases[i].assetPath,
-                            width: 40.0,
-                          ),
-                          title: IconAndLabel(
-                            spacing: 6.0,
-                            icon: Text(bin.gases[i].name),
-                            label: GasStatusWidget(level: bin.gases[i].level),
-                          ),
-                          subtitle: Text(bin.gases[i].description),
-                          trailing: IconAndLabel(
-                            icon: Icon(
-                              Icons.timer_outlined,
-                              size: 20.0,
-                              color: theme.colorScheme.onSurfaceVariant,
+                      if (bin.gases.isNotEmpty) ...[
+                        Text(
+                          'Detected Gases',
+                          style: theme.textTheme.headlineSmall,
+                        ),
+                        //SizedBox(height: 16.0),
+                        ...List.generate(
+                          bin.gases.length,
+                          (i) => ListTile(
+                            horizontalTitleGap: 4.0,
+                            contentPadding: EdgeInsets.all(0.0),
+                            leading: SvgPicture.asset(
+                              bin.gases[i].assetPath,
+                              width: 40.0,
                             ),
-                            label: Text(
-                              Helper.formatTime24Hour(
-                                DateTime.parse(bin.lastReading.timestamp),
-                              ),
-                              style: theme.textTheme.bodyMedium!.copyWith(
+                            title: IconAndLabel(
+                              spacing: 6.0,
+                              icon: Text(bin.gases[i].name),
+                              label: GasStatusWidget(level: bin.gases[i].level),
+                            ),
+                            subtitle: Text(bin.gases[i].description),
+                            trailing: IconAndLabel(
+                              icon: Icon(
+                                Icons.timer_outlined,
+                                size: 20.0,
                                 color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                              label: Text(
+                                Helper.formatTime24Hour(
+                                  DateTime.parse(bin.lastReading.timestamp),
+                                ),
+                                style: theme.textTheme.bodyMedium!.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
+
+                      if (bin.gases.isEmpty)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 4.0,
+                          children: [
+                            Text('No harmful gases detected'),
+                            Icon(
+                              Icons.check_circle,
+                              color: theme.colorScheme.primaryContainer,
+                              size: 20.0,
+                            ),
+                          ],
+                        ),
 
                       SizedBox(height: 24.0),
 
@@ -215,9 +231,7 @@ class BinDetailsSheet extends StatelessWidget {
                                         ),
                                   ),
                                   label: Text(
-                                    bin.lastReading.temperature.toStringAsFixed(
-                                      1,
-                                    ),
+                                    '${bin.lastReading.temperature.toStringAsFixed(1)}\u00B0C',
                                     style: theme.textTheme.bodyLarge,
                                   ),
                                   isHorizontal: false,
@@ -245,7 +259,7 @@ class BinDetailsSheet extends StatelessWidget {
                                         ),
                                   ),
                                   label: Text(
-                                    bin.lastReading.humidity.toStringAsFixed(1),
+                                    '${bin.lastReading.humidity.toStringAsFixed(1)}%',
                                     style: theme.textTheme.bodyLarge,
                                   ),
                                   isHorizontal: false,
