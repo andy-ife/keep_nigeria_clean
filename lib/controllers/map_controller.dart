@@ -42,7 +42,7 @@ class MapController extends ChangeNotifier {
         int index = bins.indexWhere((bin) => bin.id == reading.id);
 
         final gases = _service.calculateGases(reading.gasPpm);
-        final assetPath = _service.calculateAssetPath(reading.fillLevel);
+        final assetPath = _service.calculateAssetPath(reading.fillLevel, gases);
         final point = _points.firstWhere((p) => p.textField == bin.name);
 
         bin = bin.copyWith(

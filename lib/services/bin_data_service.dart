@@ -74,22 +74,57 @@ class BinDataService {
     return gases;
   }
 
-  String calculateAssetPath(double fillLevel) {
+  String calculateAssetPath(double fill, List<Gas> gases) {
     late String asset;
-    if (fillLevel < 10) {
-      asset = AssetConstants.bin0;
-    } else if (fillLevel >= 10 && fillLevel < 25) {
-      asset = AssetConstants.bin10;
-    } else if (fillLevel >= 25 && fillLevel < 50) {
-      asset = AssetConstants.bin25;
-    } else if (fillLevel >= 50 && fillLevel < 75) {
-      asset = AssetConstants.bin50;
-    } else if (fillLevel >= 75 && fillLevel < 90) {
-      asset = AssetConstants.bin75;
-    } else if (fillLevel >= 90 && fillLevel < 100) {
-      asset = AssetConstants.bin90;
+
+    if (gases.any((gas) => gas.level == Level.high)) {
+      if (fill < 10) {
+        asset = AssetConstants.bin0Red;
+      } else if (fill >= 10 && fill < 25) {
+        asset = AssetConstants.bin10Red;
+      } else if (fill >= 25 && fill < 50) {
+        asset = AssetConstants.bin25Red;
+      } else if (fill >= 50 && fill < 75) {
+        asset = AssetConstants.bin50Red;
+      } else if (fill >= 75 && fill < 90) {
+        asset = AssetConstants.bin75Red;
+      } else if (fill >= 90 && fill < 100) {
+        asset = AssetConstants.bin90Red;
+      } else {
+        asset = AssetConstants.bin100Red;
+      }
+    } else if (gases.any((gas) => gas.level == Level.medium)) {
+      if (fill < 10) {
+        asset = AssetConstants.bin0Yell;
+      } else if (fill >= 10 && fill < 25) {
+        asset = AssetConstants.bin10Yell;
+      } else if (fill >= 25 && fill < 50) {
+        asset = AssetConstants.bin25Yell;
+      } else if (fill >= 50 && fill < 75) {
+        asset = AssetConstants.bin50Yell;
+      } else if (fill >= 75 && fill < 90) {
+        asset = AssetConstants.bin75Yell;
+      } else if (fill >= 90 && fill < 100) {
+        asset = AssetConstants.bin90Yell;
+      } else {
+        asset = AssetConstants.bin100Yell;
+      }
     } else {
-      asset = AssetConstants.bin100;
+      if (fill < 10) {
+        asset = AssetConstants.bin0;
+      } else if (fill >= 10 && fill < 25) {
+        asset = AssetConstants.bin10;
+      } else if (fill >= 25 && fill < 50) {
+        asset = AssetConstants.bin25;
+      } else if (fill >= 50 && fill < 75) {
+        asset = AssetConstants.bin50;
+      } else if (fill >= 75 && fill < 90) {
+        asset = AssetConstants.bin75;
+      } else if (fill >= 90 && fill < 100) {
+        asset = AssetConstants.bin90;
+      } else {
+        asset = AssetConstants.bin100;
+      }
     }
 
     return asset;
