@@ -74,6 +74,16 @@ class BinDataService {
     return gases;
   }
 
+  String? calculateWarningAssetPath(List<Gas> gases) {
+    String? asset;
+    if (gases.any((gas) => gas.level == Level.high)) {
+      asset = AssetConstants.warningRedElevated;
+    } else if (gases.any((gas) => gas.level == Level.medium)) {
+      asset = AssetConstants.warningYellowElevated;
+    }
+    return asset;
+  }
+
   String calculateAssetPath(double fillLevel) {
     late String asset;
     if (fillLevel < 10) {

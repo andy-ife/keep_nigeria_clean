@@ -16,7 +16,9 @@ class MapController extends ChangeNotifier {
 
   late MapboxMap map;
   late PointAnnotationManager _pointAnnotationManager;
-  final _points = <PointAnnotation>[];
+
+  ///p.$1 is warning sign. p.$2 is bin marker.
+  final _points = <(PointAnnotation?, PointAnnotation)>[];
 
   final filters = [FilterType.nearest, FilterType.emptiest, FilterType.lowOdor];
   bool _showLegend = false;
@@ -43,12 +45,14 @@ class MapController extends ChangeNotifier {
 
         final gases = _service.calculateGases(reading.gasPpm);
         final assetPath = _service.calculateAssetPath(reading.fillLevel);
-        final point = _points.firstWhere((p) => p.textField == bin.name);
+        final warnPath = _service.calculateWarningAssetPath(gases);
+        final point = _points.firstWhere((p) => p.$2.textField == bin.name);
 
         bin = bin.copyWith(
           lastReading: reading,
           gases: gases,
           assetPath: assetPath,
+          warningAssetPath: warnPath,
         );
 
         this.bins[index] = bin;
@@ -138,9 +142,13 @@ class MapController extends ChangeNotifier {
     await centerCamera();
   }
 
-  Future<void> _updateMarker(PointAnnotation? point, Bin bin) async {
+  Future<void> _updateMarker(
+    (PointAnnotation?, PointAnnotation)? point,
+    Bin bin,
+  ) async {
     if (point != null && _points.contains(point)) {
-      await _pointAnnotationManager.delete(point);
+      await _pointAnnotationManager.delete(point.$2);
+      if (point.$1 != null) await _pointAnnotationManager.delete(point.$1!);
       _points.remove(point);
     }
 
@@ -160,8 +168,27 @@ class MapController extends ChangeNotifier {
       textOpacity: 0,
     );
 
-    final p = await _pointAnnotationManager.create(options);
-    _points.add(p);
+    final binMarker = await _pointAnnotationManager.create(options);
+    PointAnnotation? warningMarker;
+
+    if (bin.warningAssetPath != null) {
+      final bytes = await rootBundle.load(bin.warningAssetPath!);
+      final imgData = bytes.buffer.asUint8List();
+
+      final options = PointAnnotationOptions(
+        geometry: Point(
+          coordinates: Position(
+            bin.lastReading.longitude,
+            bin.lastReading.latitude + 0.001,
+          ),
+        ),
+        image: imgData,
+        iconSize: 0.8,
+      );
+      warningMarker = await _pointAnnotationManager.create(options);
+    }
+
+    _points.add((warningMarker, binMarker));
 
     _pointAnnotationManager.addOnPointAnnotationClickListener(
       _OnBinClickListener(controller: this, notify: notifyListeners),

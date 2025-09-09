@@ -6,4 +6,7 @@ class AssetConstants {
   static const bin75 = 'assets/bin-75.png';
   static const bin90 = 'assets/bin-90.png';
   static const bin100 = 'assets/bin-100.png';
+
+  static const warningRedElevated = 'assets/red-warning-elevated.png';
+  static const warningYellowElevated = 'assets/yellow-warning-elevated.png';
 }
