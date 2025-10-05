@@ -147,8 +147,6 @@ class AnalyticsScreen extends StatelessWidget {
                                         style: theme.textTheme.labelSmall,
                                       ),
                                     ),
-                                minIncluded: false,
-                                maxIncluded: true,
                               ),
                             ),
                             bottomTitles: AxisTitles(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:keep_nigeria_clean/constants/mapbox.dart';
-import 'package:keep_nigeria_clean/controllers/analytics_controller.dart';
 import 'package:keep_nigeria_clean/controllers/map_controller.dart';
 import 'package:keep_nigeria_clean/controllers/perms_controller.dart';
 import 'package:keep_nigeria_clean/theme/theme.dart';
@@ -22,7 +21,6 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => PermsController()),
         ChangeNotifierProvider(create: (_) => MapController()),
-        ChangeNotifierProvider(create: (_) => AnalyticsController()),
       ],
       child: const MyApp(),
     ),
