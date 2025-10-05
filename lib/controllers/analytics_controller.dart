@@ -16,6 +16,10 @@ class AnalyticsController extends ChangeNotifier {
   AnalyticsState state = AnalyticsState();
 
   AnalyticsController() {
+    refresh();
+  }
+
+  void refresh() {
     init();
     switchTimeframe('All');
   }

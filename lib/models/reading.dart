@@ -35,11 +35,13 @@ class Reading {
   factory Reading.fromJson(Map<String, dynamic> json) => Reading(
     latitude: Helper.doubleFromJson(json['latitude']),
     longitude: Helper.doubleFromJson(json['longitude']),
-    fillLevel: Helper.doubleFromJson(json['fill_level']),
+    fillLevel: Helper.doubleFromJson(json['fill_level']) % 100 == 0
+        ? 100
+        : Helper.doubleFromJson(json['fill_level']),
     temperature: Helper.doubleFromJson(json['temperature']),
     humidity: Helper.doubleFromJson(json['humidity']),
     timestamp: json['timestamp'],
-    id: json['id'],
+    id: json['id'] ?? 0,
     gasPpm: Helper.doubleFromJson(json['gas_ppm']),
   );
 }

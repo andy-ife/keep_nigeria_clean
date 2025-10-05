@@ -83,6 +83,7 @@ class _KNCButtonGroupState extends State<KNCButtonGroup> {
                     _selected.clear();
                     _selected.add(curr);
                   });
+                  widget.onSelectionChange(_selected);
                 }
               },
               style: !widget.floating ? null : AppButtonStyles.floating,
