@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keep_nigeria_clean/controllers/analytics_controller.dart';
+import 'package:keep_nigeria_clean/controllers/learn_controller.dart';
 import 'package:keep_nigeria_clean/pages/analytics.dart';
 import 'package:keep_nigeria_clean/pages/learn.dart';
 import 'package:keep_nigeria_clean/pages/map.dart';
@@ -22,7 +23,10 @@ class _RootViewState extends State<RootView> {
       create: (_) => AnalyticsController(),
       child: AnalyticsScreen(),
     ),
-    LearnScreen(),
+    ChangeNotifierProvider(
+      create: (_) => LearnController(),
+      child: LearnScreen(),
+    ),
   ];
 
   @override

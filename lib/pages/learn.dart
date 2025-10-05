@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:keep_nigeria_clean/controllers/learn_controller.dart';
 import 'package:keep_nigeria_clean/theme/colors.dart';
 import 'package:keep_nigeria_clean/widgets/icon_and_label.dart';
+import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class LearnScreen extends StatelessWidget {
@@ -12,26 +14,7 @@ class LearnScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final constraints = MediaQuery.of(context);
 
-    final controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onProgress: (int progress) {
-            // Update loading bar.
-          },
-          onPageStarted: (String url) {},
-          onPageFinished: (String url) {},
-          onHttpError: (HttpResponseError error) {},
-          onWebResourceError: (WebResourceError error) {},
-          onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith('https://www.youtube.com/')) {
-              return NavigationDecision.prevent;
-            }
-            return NavigationDecision.navigate;
-          },
-        ),
-      )
-      ..loadRequest(Uri.parse('https://www.youtube.com/embed/1nicf4RjU00'));
+    final controller = context.watch<LearnController>();
 
     return Scaffold(
       appBar: AppBar(
@@ -74,6 +57,7 @@ class LearnScreen extends StatelessWidget {
                   numLessons: 1,
                   stickerColor: Colors.green[100]!,
                   stickerTextColor: Colors.green[700]!,
+                  onTap: controller.recycle,
                 ),
                 _EducationCard(
                   icon: SvgPicture.asset('assets/graph.svg', width: 40.0),
@@ -90,6 +74,7 @@ class LearnScreen extends StatelessWidget {
                   numLessons: 1,
                   stickerColor: Colors.purple[100]!,
                   stickerTextColor: Colors.purple[700]!,
+                  onTap: controller.reduce,
                 ),
               ],
             ),
@@ -101,7 +86,7 @@ class LearnScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8.0),
               ),
-              child: WebViewWidget(controller: controller),
+              child: WebViewWidget(controller: controller.webController),
             ),
             SizedBox(),
             Text('Trending Articles', style: theme.textTheme.headlineSmall),
@@ -110,7 +95,7 @@ class LearnScreen extends StatelessWidget {
               subtitle:
                   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris fermentum sodales leo, ut porta ante eleifend nec. Donec eget consequat est. Vestibulum id tristique lectus.',
               image: Image.network(
-                'https://picsum.photos/seed/factory/200',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcyzsRv_SuLbHOja2LZh6HeBcwhUPtWSb9I9QfQp0FpQ&s=10',
                 scale: 1.0,
               ),
               tag: 'recycling',
@@ -123,7 +108,7 @@ class LearnScreen extends StatelessWidget {
               subtitle:
                   'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris fermentum sodales leo, ut porta ante eleifend nec. Donec eget consequat est. Vestibulum id tristique lectus.',
               image: Image.network(
-                'https://picsum.photos/seed/factory/200',
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcyzsRv_SuLbHOja2LZh6HeBcwhUPtWSb9I9QfQp0FpQ&s=10',
                 scale: 1.0,
               ),
               tag: 'recycling',
@@ -146,6 +131,7 @@ class _EducationCard extends StatelessWidget {
     required this.numLessons,
     required this.stickerColor,
     required this.stickerTextColor,
+    required this.onTap,
   });
 
   final Widget icon;
@@ -154,6 +140,7 @@ class _EducationCard extends StatelessWidget {
   final int numLessons;
   final Color stickerColor;
   final Color stickerTextColor;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -161,36 +148,39 @@ class _EducationCard extends StatelessWidget {
     final constraints = MediaQuery.of(context);
 
     final lessons = numLessons > 1 ? 'lessons' : 'lesson';
-    return SizedBox(
-      width: constraints.size.width * 0.44,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: 8.0,
-            children: [
-              icon,
-              title,
-              subtitle,
-              Container(
-                decoration: BoxDecoration(
-                  color: stickerColor,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      '$numLessons $lessons',
-                      style: theme.textTheme.labelMedium!.copyWith(
-                        color: stickerTextColor,
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        width: constraints.size.width * 0.44,
+        child: Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 8.0,
+              children: [
+                icon,
+                title,
+                subtitle,
+                Container(
+                  decoration: BoxDecoration(
+                    color: stickerColor,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        '$numLessons $lessons',
+                        style: theme.textTheme.labelMedium!.copyWith(
+                          color: stickerTextColor,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
