@@ -47,7 +47,7 @@ class _KNCButtonGroupState extends State<KNCButtonGroup> {
               return TextButton(
                 onPressed: () {
                   setState(() {
-                    _selected.remove(curr);
+                    widget.enableMultiSelection ? _selected.remove(curr) : null;
                   });
 
                   widget.onSelectionChange(_selected);

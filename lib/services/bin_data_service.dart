@@ -79,6 +79,9 @@ class BinDataService {
     return gasCounts;
   }
 
-  // TODO: Implement this
-  double getAIPrediction() => 100.0;
+  // TODO: Implement these
+  double getAIPrediction() => 75.0;
+
+  String getAIRecommendations() =>
+      'Bin C requires immediate collection - 95% full with high hazard level';
 }

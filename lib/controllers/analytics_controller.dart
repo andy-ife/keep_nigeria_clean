@@ -8,7 +8,7 @@ import 'package:keep_nigeria_clean/services/bin_data_service.dart';
 class AnalyticsController extends ChangeNotifier {
   final _service = BinDataService();
 
-  final StreamController<String> _streamController = StreamController<String>();
+  StreamController<String>? _streamController;
   StreamSubscription? _subscription;
 
   final tabs = ['All', 'Bin A', 'Bin B'];
@@ -24,7 +24,10 @@ class AnalyticsController extends ChangeNotifier {
     if (state.loading) return;
     state = state.copyWith(loading: true, error: '');
 
-    _streamController.stream.asBroadcastStream().listen((streamIndex) {
+    _streamController?.close();
+    _streamController = StreamController<String>();
+
+    _streamController?.stream.asBroadcastStream().listen((streamIndex) {
       _subscription?.cancel();
 
       Stream<List<Reading>> targetStream;
@@ -68,13 +71,13 @@ class AnalyticsController extends ChangeNotifier {
   }
 
   void switchTimeframe(String tag) {
-    _streamController.add(tag);
+    _streamController?.add(tag);
   }
 
   @override
   void dispose() {
     _subscription?.cancel();
-    _streamController.close();
+    _streamController?.close();
     super.dispose();
   }
 }
