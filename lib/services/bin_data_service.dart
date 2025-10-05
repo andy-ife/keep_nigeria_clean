@@ -78,4 +78,7 @@ class BinDataService {
     }
     return gasCounts;
   }
+
+  // TODO: Implement this
+  double getAIPrediction() => 100.0;
 }
