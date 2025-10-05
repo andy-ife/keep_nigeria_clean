@@ -23,10 +23,10 @@ class AnalyticsScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
             child: KNCButtonGroup(
-              values: const ['Today', 'Past Week', 'Past Month', 'All'],
+              values: const ['All', 'Bin A', 'Bin B'],
               onSelectionChange: (_) {},
               enableMultiSelection: false,
-              initialSelection: {'Today'},
+              initialSelection: {'All'},
             ),
           ),
         ),

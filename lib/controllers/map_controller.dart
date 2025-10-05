@@ -5,12 +5,12 @@ import 'package:flutter/services.dart';
 import 'package:keep_nigeria_clean/constants/filter.dart';
 import 'package:keep_nigeria_clean/models/bin.dart';
 import 'package:keep_nigeria_clean/models/reading.dart';
-import 'package:keep_nigeria_clean/services/bin_data_service.dart';
+import 'package:keep_nigeria_clean/services/realtime_bin_service.dart';
 import 'package:keep_nigeria_clean/theme/colors.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 
 class MapController extends ChangeNotifier {
-  final _service = BinDataService();
+  final _service = RealtimeBinService();
 
   List<Bin> bins = [Bin(name: 'Bin A', id: 1), Bin(name: 'Bin B', id: 2)];
 

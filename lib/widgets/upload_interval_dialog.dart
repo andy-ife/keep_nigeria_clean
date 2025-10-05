@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:keep_nigeria_clean/services/bin_data_service.dart';
+import 'package:keep_nigeria_clean/services/realtime_bin_service.dart';
 import 'package:keep_nigeria_clean/utils/helpers.dart';
 
 class UploadIntervalDialog extends StatefulWidget {
@@ -17,7 +17,7 @@ class _UploadIntervalDialogState extends State<UploadIntervalDialog> {
   String? _error;
   int? _currentInterval;
 
-  final _service = BinDataService();
+  final _service = RealtimeBinService();
 
   @override
   void initState() {
