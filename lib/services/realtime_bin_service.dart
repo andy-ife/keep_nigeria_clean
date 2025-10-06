@@ -25,7 +25,7 @@ class RealtimeBinService {
     return _bin1Ref.onValue.map((event) {
       final data = event.snapshot.value as Map?;
       return data != null
-          ? Reading.fromJson(data.cast<String, dynamic>())
+          ? Reading.fromJson(data.cast<String, dynamic>(), id: 1)
           : null;
     });
   }
@@ -34,7 +34,7 @@ class RealtimeBinService {
     return _bin2Ref.onValue.map((event) {
       final data = event.snapshot.value as Map?;
       return data != null
-          ? Reading.fromJson(data.cast<String, dynamic>())
+          ? Reading.fromJson(data.cast<String, dynamic>(), id: 2)
           : null;
     });
   }
