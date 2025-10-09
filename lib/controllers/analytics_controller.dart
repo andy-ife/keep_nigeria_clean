@@ -31,11 +31,11 @@ class AnalyticsController extends ChangeNotifier {
     _streamController?.close();
     _streamController = StreamController<String>();
 
-    _streamController?.stream.asBroadcastStream().listen((streamIndex) {
+    _streamController?.stream.asBroadcastStream().listen((tag) {
       _subscription?.cancel();
 
       Stream<List<Reading>> targetStream;
-      switch (streamIndex) {
+      switch (tag) {
         case 'All':
           targetStream = _service.allStream;
           break;
@@ -46,7 +46,7 @@ class AnalyticsController extends ChangeNotifier {
           targetStream = _service.bin2Stream;
           break;
         default:
-          print('Invalid stream index: $streamIndex');
+          print('Invalid stream index: $tag');
           return;
       }
 
@@ -88,6 +88,7 @@ class AnalyticsController extends ChangeNotifier {
 
 class AnalyticsState {
   final bool loading;
+  final bool switching;
   final String error;
   final List<Reading> data;
   final int avgFillLevel;
@@ -96,6 +97,7 @@ class AnalyticsState {
 
   const AnalyticsState({
     this.loading = false,
+    this.switching = false,
     this.error = '',
     this.data = const [],
     this.avgFillLevel = 0,
@@ -105,6 +107,7 @@ class AnalyticsState {
 
   AnalyticsState copyWith({
     bool? loading,
+    bool? switching,
     String? error,
     List<Reading>? data,
     int? avgFillLevel,
@@ -112,6 +115,7 @@ class AnalyticsState {
     Map<Gas, int>? gasCounts,
   }) => AnalyticsState(
     loading: loading ?? this.loading,
+    switching: switching ?? this.switching,
     error: error ?? this.error,
     data: data ?? this.data,
     avgFillLevel: avgFillLevel ?? this.avgFillLevel,

@@ -6,6 +6,7 @@ import 'package:keep_nigeria_clean/models/bin.dart';
 import 'package:keep_nigeria_clean/theme/colors.dart';
 import 'package:keep_nigeria_clean/theme/styles.dart';
 import 'package:keep_nigeria_clean/utils/helpers.dart';
+import 'package:keep_nigeria_clean/widgets/flashing_widget.dart';
 import 'package:keep_nigeria_clean/widgets/gas_status.dart';
 import 'package:keep_nigeria_clean/widgets/icon_and_label.dart';
 import 'package:provider/provider.dart';
@@ -127,8 +128,10 @@ class BinDetailsSheet extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                '${((bin.lastReading.fillLevel).toInt().toString())}% full',
+                              FlashingWidget(
+                                child: Text(
+                                  '${((bin.lastReading.fillLevel).toInt().toString())}% full',
+                                ),
                               ),
                               IconAndLabel(
                                 icon: Icon(
@@ -136,10 +139,12 @@ class BinDetailsSheet extends StatelessWidget {
                                   size: 16.0,
                                   color: theme.colorScheme.onSurfaceVariant,
                                 ),
-                                label: Text(
-                                  'Last Used ${Helper.formatTime24Hour(DateTime.parse(bin.lastReading.timestamp))}',
-                                  style: theme.textTheme.bodySmall!.copyWith(
-                                    color: theme.colorScheme.onSurfaceVariant,
+                                label: FlashingWidget(
+                                  child: Text(
+                                    'Last Used ${Helper.formatTime24Hour(DateTime.parse(bin.lastReading.timestamp))}',
+                                    style: theme.textTheme.bodySmall!.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -230,9 +235,11 @@ class BinDetailsSheet extends StatelessWidget {
                                               .onSurfaceVariant,
                                         ),
                                   ),
-                                  label: Text(
-                                    '${bin.lastReading.temperature.toStringAsFixed(1)}\u00B0C',
-                                    style: theme.textTheme.bodyLarge,
+                                  label: FlashingWidget(
+                                    child: Text(
+                                      '${bin.lastReading.temperature.toStringAsFixed(1)}\u00B0C',
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
                                   ),
                                   isHorizontal: false,
                                   align: CrossAxisAlignment.start,
@@ -258,9 +265,11 @@ class BinDetailsSheet extends StatelessWidget {
                                               .onSurfaceVariant,
                                         ),
                                   ),
-                                  label: Text(
-                                    '${bin.lastReading.humidity.toStringAsFixed(1)}%',
-                                    style: theme.textTheme.bodyLarge,
+                                  label: FlashingWidget(
+                                    child: Text(
+                                      '${bin.lastReading.humidity.toStringAsFixed(1)}%',
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
                                   ),
                                   isHorizontal: false,
                                   align: CrossAxisAlignment.start,
@@ -292,11 +301,13 @@ class BinDetailsSheet extends StatelessWidget {
                                               .onSurfaceVariant,
                                         ),
                                   ),
-                                  label: Text(
-                                    '${bin.lastReading.latitude}, ${bin.lastReading.longitude}',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: theme.textTheme.bodyLarge,
+                                  label: FlashingWidget(
+                                    child: Text(
+                                      '${bin.lastReading.latitude}, ${bin.lastReading.longitude}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
                                   ),
                                   isHorizontal: false,
                                   align: CrossAxisAlignment.start,
@@ -322,9 +333,11 @@ class BinDetailsSheet extends StatelessWidget {
                                               .onSurfaceVariant,
                                         ),
                                   ),
-                                  label: Text(
-                                    bin.region,
-                                    style: theme.textTheme.bodyLarge,
+                                  label: FlashingWidget(
+                                    child: Text(
+                                      bin.region,
+                                      style: theme.textTheme.bodyLarge,
+                                    ),
                                   ),
                                   isHorizontal: false,
                                   align: CrossAxisAlignment.start,

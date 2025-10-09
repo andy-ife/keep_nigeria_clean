@@ -6,6 +6,7 @@ import 'package:keep_nigeria_clean/controllers/analytics_controller.dart';
 import 'package:keep_nigeria_clean/theme/colors.dart';
 import 'package:keep_nigeria_clean/widgets/button_group.dart';
 import 'package:keep_nigeria_clean/widgets/error_widget.dart';
+import 'package:keep_nigeria_clean/widgets/flashing_widget.dart';
 import 'package:provider/provider.dart';
 
 class AnalyticsScreen extends StatelessWidget {
@@ -28,13 +29,22 @@ class AnalyticsScreen extends StatelessWidget {
           preferredSize: Size(constraints.width, 64.0),
           child: Padding(
             padding: const EdgeInsets.only(bottom: 16.0),
-            child: KNCButtonGroup(
-              values: controller.tabs,
-              onSelectionChange: (newValues) {
-                controller.switchTimeframe(newValues.first);
-              },
-              enableMultiSelection: false,
-              initialSelection: {controller.tabs.first},
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                KNCButtonGroup(
+                  values: controller.tabs,
+                  onSelectionChange: (newValues) {
+                    controller.switchTimeframe(newValues.first);
+                  },
+                  enableMultiSelection: false,
+                  initialSelection: {controller.tabs.first},
+                ),
+                if (state.switching) ...[
+                  SizedBox(height: 2.0),
+                  LinearProgressIndicator(),
+                ],
+              ],
             ),
           ),
         ),
@@ -242,7 +252,10 @@ class _StatisticCard extends StatelessWidget {
       color: AppColors.white,
       child: ListTile(
         title: Text(title),
-        subtitle: Text(value),
+        subtitle: FlashingWidget(
+          showFlashOnChangeOnly: true,
+          child: Text(value),
+        ),
         titleTextStyle: theme.textTheme.bodyMedium!.copyWith(
           color: theme.colorScheme.onSurfaceVariant,
         ),
@@ -282,7 +295,10 @@ class _GasDetectionCard extends StatelessWidget {
           ),
         ),
         SizedBox(width: 16.0),
-        Text(value.toString()),
+        FlashingWidget(
+          showFlashOnChangeOnly: true,
+          child: Text(value.toString()),
+        ),
       ],
     );
   }
