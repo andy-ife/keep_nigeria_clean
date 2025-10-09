@@ -160,7 +160,7 @@ class BinDetailsSheet extends StatelessWidget {
                       SizedBox(height: 28.0),
                       if (bin.gases.isNotEmpty) ...[
                         Text(
-                          'Detected Gases',
+                          'Possible Gases Detected',
                           style: theme.textTheme.headlineSmall,
                         ),
                         //SizedBox(height: 16.0),
