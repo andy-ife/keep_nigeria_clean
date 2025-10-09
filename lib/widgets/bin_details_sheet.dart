@@ -141,7 +141,7 @@ class BinDetailsSheet extends StatelessWidget {
                                 ),
                                 label: FlashingWidget(
                                   child: Text(
-                                    'Last Used ${Helper.formatTime24Hour(DateTime.parse(bin.lastReading.timestamp))}',
+                                    'Last Used ${Helper.formatTime24Hour(bin.lastReading.timestamp)}',
                                     style: theme.textTheme.bodySmall!.copyWith(
                                       color: theme.colorScheme.onSurfaceVariant,
                                     ),
@@ -187,7 +187,7 @@ class BinDetailsSheet extends StatelessWidget {
                               ),
                               label: Text(
                                 Helper.formatTime24Hour(
-                                  DateTime.parse(bin.lastReading.timestamp),
+                                  bin.lastReading.timestamp,
                                 ),
                                 style: theme.textTheme.bodyMedium!.copyWith(
                                   color: theme.colorScheme.onSurfaceVariant,

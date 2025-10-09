@@ -37,12 +37,7 @@ class BinDataService {
     bin2Stream,
     (a, b) => [...a, ...b]
       ..sort((a, b) {
-        final datetimeA = DateTime.tryParse(a.timestamp);
-        final datetimeB = DateTime.tryParse(b.timestamp);
-
-        if (datetimeA == null || datetimeB == null) return -1;
-
-        return datetimeA.compareTo(datetimeB);
+        return a.timestamp.compareTo(b.timestamp);
       }),
   );
 

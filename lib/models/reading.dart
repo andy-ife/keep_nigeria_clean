@@ -8,9 +8,9 @@ class Reading {
   final double humidity;
   final double gasPpm;
   final int id;
-  final String timestamp;
+  final DateTime timestamp;
 
-  const Reading({
+  Reading({
     this.latitude = 9.0820,
     this.longitude = 8.6753,
     this.fillLevel = 0,
@@ -18,8 +18,8 @@ class Reading {
     this.humidity = 0,
     this.gasPpm = 0,
     this.id = 0,
-    this.timestamp = '1999-01-01T00:00',
-  });
+    DateTime? timestamp,
+  }) : timestamp = timestamp ?? DateTime.now();
 
   Map<String, dynamic> toJson() => {
     'latitude': latitude,
@@ -40,7 +40,7 @@ class Reading {
         : Helper.doubleFromJson(json['fill_level']),
     temperature: Helper.doubleFromJson(json['temperature']),
     humidity: Helper.doubleFromJson(json['humidity']),
-    timestamp: json['timestamp'],
+    timestamp: DateTime.tryParse(json['timestamp']) ?? DateTime.now(),
     id: json['id'] ?? id ?? 0,
     gasPpm: Helper.doubleFromJson(json['gas_ppm']),
   );
