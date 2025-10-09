@@ -1,14 +1,14 @@
 import 'package:keep_nigeria_clean/utils/helpers.dart';
 
 class Reading {
-  final double latitude;
-  final double longitude;
-  final double fillLevel;
-  final double temperature;
-  final double humidity;
-  final double gasPpm;
-  final int id;
-  final DateTime timestamp;
+  double latitude;
+  double longitude;
+  double fillLevel;
+  double temperature;
+  double humidity;
+  double gasPpm;
+  int id;
+  DateTime timestamp;
 
   Reading({
     this.latitude = 9.0820,
@@ -35,9 +35,7 @@ class Reading {
   factory Reading.fromJson(Map<String, dynamic> json, {int? id}) => Reading(
     latitude: Helper.doubleFromJson(json['latitude']),
     longitude: Helper.doubleFromJson(json['longitude']),
-    fillLevel: Helper.doubleFromJson(json['fill_level']) % 100 == 0
-        ? 100
-        : Helper.doubleFromJson(json['fill_level']),
+    fillLevel: Helper.doubleFromJson(json['fill_level']),
     temperature: Helper.doubleFromJson(json['temperature']),
     humidity: Helper.doubleFromJson(json['humidity']),
     timestamp: DateTime.tryParse(json['timestamp']) ?? DateTime.now(),

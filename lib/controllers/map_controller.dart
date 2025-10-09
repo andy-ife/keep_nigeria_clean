@@ -155,33 +155,37 @@ class MapController extends ChangeNotifier {
   }
 
   Future<void> _updateMarker(PointAnnotation? point, Bin bin) async {
-    if (point != null && _points.contains(point)) {
-      await _pointAnnotationManager.delete(point);
-      _points.remove(point);
-    }
+    try {
+      if (point != null && _points.contains(point)) {
+        await _pointAnnotationManager.delete(point);
+        _points.remove(point);
+      }
 
-    final bytes = await rootBundle.load(bin.assetPath);
-    final imgData = bytes.buffer.asUint8List();
+      final bytes = await rootBundle.load(bin.assetPath);
+      final imgData = bytes.buffer.asUint8List();
 
-    final options = PointAnnotationOptions(
-      geometry: Point(
-        coordinates: Position(
-          bin.lastReading.longitude,
-          bin.lastReading.latitude,
+      final options = PointAnnotationOptions(
+        geometry: Point(
+          coordinates: Position(
+            bin.lastReading.longitude,
+            bin.lastReading.latitude,
+          ),
         ),
-      ),
-      image: imgData,
-      iconSize: 0.8,
-      textField: bin.name,
-      textOpacity: 0,
-    );
+        image: imgData,
+        iconSize: 0.8,
+        textField: bin.name,
+        textOpacity: 0,
+      );
 
-    final p = await _pointAnnotationManager.create(options);
-    _points.add(p);
+      final p = await _pointAnnotationManager.create(options);
+      _points.add(p);
 
-    _pointAnnotationManager.addOnPointAnnotationClickListener(
-      _OnBinClickListener(controller: this, notify: notifyListeners),
-    );
+      _pointAnnotationManager.addOnPointAnnotationClickListener(
+        _OnBinClickListener(controller: this, notify: notifyListeners),
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 }
 

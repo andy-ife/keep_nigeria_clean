@@ -29,7 +29,11 @@ class BinDataService {
       .orderBy('timestamp')
       .snapshots()
       .map(
-        (event) => event.docs.map((d) => Reading.fromJson(d.data())).toList(),
+        (event) => event.docs.map((d) {
+          final reading = Reading.fromJson(d.data());
+          if (reading.fillLevel < 33) reading.fillLevel = 0;
+          return reading;
+        }).toList(),
       );
 
   Stream<List<Reading>> get allStream => Rx.combineLatest2(
