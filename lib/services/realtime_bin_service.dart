@@ -50,7 +50,7 @@ class RealtimeBinService {
   List<Gas> calculateGases(double gasPpm) {
     final gases = <Gas>[];
 
-    if (gasPpm > 1100 && gasPpm <= 2200) {
+    if (gasPpm > 1200 && gasPpm <= 2200) {
       gases.addAll([
         GasConstants.alcohol.copyWith(
           level: Level.medium,
