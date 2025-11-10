@@ -33,15 +33,9 @@ class RealtimeBinService {
   Stream<Reading?> bin2Stream() {
     return _bin2Ref.onValue.map((event) {
       final data = event.snapshot.value as Map?;
-      if (data != null) {
-        final reading = Reading.fromJson(data.cast<String, dynamic>(), id: 2);
-
-        if (reading.fillLevel < 33) reading.fillLevel = 0;
-
-        return reading;
-      } else {
-        return null;
-      }
+      return data != null
+          ? Reading.fromJson(data.cast<String, dynamic>(), id: 2)
+          : null;
     });
   }
 
@@ -50,7 +44,7 @@ class RealtimeBinService {
   List<Gas> calculateGases(double gasPpm) {
     final gases = <Gas>[];
 
-    if (gasPpm > 1200 && gasPpm <= 2200) {
+    if (gasPpm > 1800 && gasPpm <= 2200) {
       gases.addAll([
         GasConstants.alcohol.copyWith(
           level: Level.medium,
