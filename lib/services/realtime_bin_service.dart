@@ -44,18 +44,14 @@ class RealtimeBinService {
   List<Gas> calculateGases(double gasPpm) {
     final gases = <Gas>[];
 
-    if (gasPpm > 1800 && gasPpm <= 2200) {
-      gases.addAll([
-        GasConstants.alcohol.copyWith(
+    if (gasPpm > 2000 && gasPpm <= 2400) {
+      gases.add(
+        GasConstants.smoke.copyWith(
           level: Level.medium,
           lastUpdate: DateTime.now(),
         ),
-        GasConstants.smoke.copyWith(
-          level: Level.low,
-          lastUpdate: DateTime.now(),
-        ),
-      ]);
-    } else if (gasPpm > 2200 && gasPpm <= 3000) {
+      );
+    } else if (gasPpm > 2400 && gasPpm <= 3000) {
       gases.add(
         GasConstants.methane.copyWith(
           level: Level.high,
