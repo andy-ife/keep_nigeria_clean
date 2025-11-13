@@ -30,7 +30,13 @@ class LearnController extends ChangeNotifier {
         },
       ),
     )
-    ..loadRequest(Uri.parse('https://www.youtube.com/embed/1nicf4RjU00'));
+    ..loadRequest(
+      Uri.parse('https://www.youtube.com/embed/1nicf4RjU00'),
+      headers: {
+        'Referrer-Policy': 'strict-origin-when-cross-origin',
+        'Referer': 'https://com.example.keep_nigeria_clean',
+      },
+    );
 
   Future recycle() async {
     if (!await launchUrl(recycleUrl, mode: LaunchMode.inAppBrowserView)) {
