@@ -33,6 +33,17 @@ class MapScreen extends StatelessWidget {
       );
     }
 
+    if (controller.showSnackbar.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(controller.showSnackbar),
+            backgroundColor: Colors.green,
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       floatingActionButton: Column(

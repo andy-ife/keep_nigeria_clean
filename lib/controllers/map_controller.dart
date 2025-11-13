@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keep_nigeria_clean/constants/filter.dart';
@@ -23,6 +24,7 @@ class MapController extends ChangeNotifier {
   Bin? selectedBin;
   bool showBinSheet = false;
   bool sheetVisible = false;
+  String showSnackbar = "";
 
   bool get showLegend => _showLegend;
   set showLegend(bool value) {
@@ -185,6 +187,20 @@ class MapController extends ChangeNotifier {
       );
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future reportBin(Bin bin) async {
+    try {
+      await FirebaseFirestore.instance.collection("reports").add(bin.toJson());
+      showSnackbar = "Authorities have been notified";
+      notifyListeners();
+    } catch (e) {
+      showSnackbar = e.toString();
+    } finally {
+      await Future.delayed(Duration(milliseconds: 300));
+      showSnackbar = "";
+      notifyListeners();
     }
   }
 }

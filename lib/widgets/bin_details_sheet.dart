@@ -371,7 +371,10 @@ class BinDetailsSheet extends StatelessWidget {
                       ),
                       Expanded(
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            Navigator.pop(context);
+                            await controller.reportBin(bin);
+                          },
                           style: AppButtonStyles.outlined.copyWith(
                             foregroundColor: WidgetStateProperty.all(
                               AppColors.red,
