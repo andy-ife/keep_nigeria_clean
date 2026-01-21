@@ -375,6 +375,7 @@ class _BinDetailsSheetState extends State<BinDetailsSheet> {
                         child: TextButton(
                           onPressed: () async {
                             setState(() => _routing = true);
+
                             Position pos = await Geolocator.getCurrentPosition(
                               desiredAccuracy: LocationAccuracy.high,
                             );
@@ -385,7 +386,7 @@ class _BinDetailsSheetState extends State<BinDetailsSheet> {
                             setState(() => _routing = false);
 
                             String url =
-                                'https://www.google.com/maps/dir/?api=1&origin=${pos.latitude},${pos.longitude} &destination=${widget.initialBin.lastReading.latitude},${widget.initialBin.lastReading.longitude}&travelmode=driving&dir_action=navigate';
+                                'https://www.google.com/maps/dir/?api=1&origin=${pos.latitude},${pos.longitude}&destination=${widget.initialBin.lastReading.latitude},${widget.initialBin.lastReading.longitude}&travelmode=driving&dir_action=preview';
 
                             _launchURL(Uri.parse(url));
                           },
@@ -393,7 +394,9 @@ class _BinDetailsSheetState extends State<BinDetailsSheet> {
                           child: _routing
                               ? SizedBox.square(
                                   dimension: 20,
-                                  child: CircularProgressIndicator(),
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
                                 )
                               : Text('Generate Route'),
                         ),
