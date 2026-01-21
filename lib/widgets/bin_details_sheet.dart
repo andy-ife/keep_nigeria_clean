@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:keep_nigeria_clean/constants/level.dart';
 import 'package:keep_nigeria_clean/controllers/map_controller.dart';
 import 'package:keep_nigeria_clean/models/bin.dart';
@@ -10,17 +11,25 @@ import 'package:keep_nigeria_clean/widgets/flashing_widget.dart';
 import 'package:keep_nigeria_clean/widgets/gas_status.dart';
 import 'package:keep_nigeria_clean/widgets/icon_and_label.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class BinDetailsSheet extends StatelessWidget {
+class BinDetailsSheet extends StatefulWidget {
   const BinDetailsSheet({super.key, required this.initialBin});
 
   final Bin initialBin;
 
   @override
+  State<BinDetailsSheet> createState() => _BinDetailsSheetState();
+}
+
+class _BinDetailsSheetState extends State<BinDetailsSheet> {
+  bool _routing = false;
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final controller = context.watch<MapController>();
-    final bin = controller.bins.firstWhere((bin) => bin == initialBin);
+    final bin = controller.bins.firstWhere((bin) => bin == widget.initialBin);
     final toxics = bin.gases.where((gas) => gas.level == Level.high).toList();
 
     return _makeDismissible(
@@ -364,9 +373,29 @@ class BinDetailsSheet extends StatelessWidget {
                     children: [
                       Expanded(
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            setState(() => _routing = true);
+                            Position pos = await Geolocator.getCurrentPosition(
+                              desiredAccuracy: LocationAccuracy.high,
+                            );
+                            // Source - https://stackoverflow.com/a
+                            // Posted by quim
+                            // Retrieved 2026-01-21, License - CC BY-SA 4.0
+
+                            setState(() => _routing = false);
+
+                            String url =
+                                'https://www.google.com/maps/dir/?api=1&origin=${pos.latitude},${pos.longitude} &destination=${widget.initialBin.lastReading.latitude},${widget.initialBin.lastReading.longitude}&travelmode=driving&dir_action=navigate';
+
+                            _launchURL(Uri.parse(url));
+                          },
                           style: AppButtonStyles.filled,
-                          child: Text('Generate Route'),
+                          child: _routing
+                              ? SizedBox.square(
+                                  dimension: 20,
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Text('Generate Route'),
                         ),
                       ),
                       Expanded(
@@ -402,4 +431,13 @@ class BinDetailsSheet extends StatelessWidget {
     onTap: () => Navigator.of(context, rootNavigator: true).pop(),
     child: GestureDetector(onTap: () {}, child: child),
   );
+
+  // Source - https://stackoverflow.com/a
+  void _launchURL(Uri url) async {
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 }
