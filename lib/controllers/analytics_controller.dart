@@ -78,6 +78,15 @@ class AnalyticsController extends ChangeNotifier {
     _streamController?.add(tag);
   }
 
+  Future doPrediction() async {
+    state = state.copyWith(predicting: true);
+    notifyListeners();
+
+    await Future.delayed(Duration(seconds: 3));
+
+    state = state.copyWith(predictedRate: 0.43, predicting: false);
+  }
+
   @override
   void dispose() {
     _subscription?.cancel();
@@ -87,6 +96,8 @@ class AnalyticsController extends ChangeNotifier {
 }
 
 class AnalyticsState {
+  final bool predicting;
+  final double predictedRate;
   final bool loading;
   final bool switching;
   final String error;
@@ -96,6 +107,8 @@ class AnalyticsState {
   final Map<Gas, int> gasCounts;
 
   const AnalyticsState({
+    this.predicting = false,
+    this.predictedRate = 0,
     this.loading = false,
     this.switching = false,
     this.error = '',
@@ -106,6 +119,8 @@ class AnalyticsState {
   });
 
   AnalyticsState copyWith({
+    double? predictedRate,
+    bool? predicting,
     bool? loading,
     bool? switching,
     String? error,
@@ -114,6 +129,8 @@ class AnalyticsState {
     int? avgTemp,
     Map<Gas, int>? gasCounts,
   }) => AnalyticsState(
+    predictedRate: predictedRate ?? this.predictedRate,
+    predicting: predicting ?? this.predicting,
     loading: loading ?? this.loading,
     switching: switching ?? this.switching,
     error: error ?? this.error,

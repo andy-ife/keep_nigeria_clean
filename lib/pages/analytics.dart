@@ -104,7 +104,41 @@ class AnalyticsScreen extends StatelessWidget {
                           ),
                         ),
                         ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () {
+                            controller.doPrediction();
+                            showDialog(
+                              context: context,
+                              builder: (ctx) {
+                                return Dialog(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(40),
+                                    child: state.predicting
+                                        ? CircularProgressIndicator()
+                                        : Column(
+                                            spacing: 4,
+                                            children: [
+                                              Text(
+                                                'Predicted rate for the next hour',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .labelMedium!
+                                                    .copyWith(
+                                                      color: Colors.grey,
+                                                    ),
+                                              ),
+                                              Text(
+                                                state.predictedRate.toString(),
+                                                style: Theme.of(
+                                                  context,
+                                                ).textTheme.bodyLarge,
+                                              ),
+                                            ],
+                                          ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
                           label: Text('AI Predict'),
                           icon: Icon(Icons.star),
                         ),
