@@ -79,12 +79,15 @@ class AnalyticsController extends ChangeNotifier {
   }
 
   Future doPrediction() async {
-    state = state.copyWith(predicting: true);
+    if (state.predicting) return;
+
+    state = state.copyWith(predictedRate: 0, predicting: true);
     notifyListeners();
 
     await Future.delayed(Duration(seconds: 3));
 
-    state = state.copyWith(predictedRate: 0.43, predicting: false);
+    state = state.copyWith(predictedRate: 0.012, predicting: false);
+    notifyListeners();
   }
 
   @override

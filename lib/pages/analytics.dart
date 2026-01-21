@@ -9,8 +9,49 @@ import 'package:keep_nigeria_clean/widgets/error_widget.dart';
 import 'package:keep_nigeria_clean/widgets/flashing_widget.dart';
 import 'package:provider/provider.dart';
 
-class AnalyticsScreen extends StatelessWidget {
+class AnalyticsScreen extends StatefulWidget {
   const AnalyticsScreen({super.key});
+
+  @override
+  State<AnalyticsScreen> createState() => _AnalyticsScreenState();
+}
+
+class _AnalyticsScreenState extends State<AnalyticsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<AnalyticsController>(context, listen: false).addListener(() {
+      if (Provider.of<AnalyticsController>(
+            context,
+            listen: false,
+          ).state.predictedRate !=
+          0) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => showDialog(
+            context: context,
+            builder: (_) => Dialog(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Predicted rate for the next hour'),
+                    Text(
+                      Provider.of<AnalyticsController>(
+                        context,
+                        listen: false,
+                      ).state.predictedRate.toString(),
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,40 +147,13 @@ class AnalyticsScreen extends StatelessWidget {
                         ElevatedButton.icon(
                           onPressed: () {
                             controller.doPrediction();
-                            showDialog(
-                              context: context,
-                              builder: (ctx) {
-                                return Dialog(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(40),
-                                    child: state.predicting
-                                        ? CircularProgressIndicator()
-                                        : Column(
-                                            spacing: 4,
-                                            children: [
-                                              Text(
-                                                'Predicted rate for the next hour',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .labelMedium!
-                                                    .copyWith(
-                                                      color: Colors.grey,
-                                                    ),
-                                              ),
-                                              Text(
-                                                state.predictedRate.toString(),
-                                                style: Theme.of(
-                                                  context,
-                                                ).textTheme.bodyLarge,
-                                              ),
-                                            ],
-                                          ),
-                                  ),
-                                );
-                              },
-                            );
                           },
-                          label: Text('AI Predict'),
+                          label: !state.predicting
+                              ? Text('AI Predict')
+                              : SizedBox.square(
+                                  dimension: 20,
+                                  child: CircularProgressIndicator(),
+                                ),
                           icon: Icon(Icons.star),
                         ),
                       ],
